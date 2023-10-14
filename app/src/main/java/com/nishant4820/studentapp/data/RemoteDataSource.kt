@@ -6,7 +6,7 @@ import retrofit2.Response
 import javax.inject.Inject
 
 class RemoteDataSource @Inject constructor(
-    private val eventServicesAPI : EventServicesAPI
+    private val eventServicesAPI: EventServicesAPI
 ) {
 
     suspend fun getAllNotices(): Response<NoticeResponse> {

@@ -1,4 +1,4 @@
-package com.nishant4820.studentapp
+package com.nishant4820.studentapp.viewmodels
 
 import android.app.Application
 import android.content.Context
@@ -41,7 +41,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun handleAllNoticesResponse(response: Response<NoticeResponse>): NetworkResult<NoticeResponse>? {
+    private fun handleAllNoticesResponse(response: Response<NoticeResponse>): NetworkResult<NoticeResponse> {
         when {
             response.message().toString().contains("timeout") -> {
                 return NetworkResult.Error("Timeout")

@@ -20,18 +20,10 @@ class NoticesAdapter: RecyclerView.Adapter<NoticesAdapter.ViewHolder>() {
             binding.tvDescription.text = notice.description
         }
 
-//        companion object {
-//            fun from(parent: ViewGroup) : ViewHolder {
-//                val layoutInflater = LayoutInflater.from(parent.context)
-//                val binding = ItemNoticeBinding.inflate(layoutInflater, parent, false)
-//                return ViewHolder(binding)
-//            }
-//        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(ItemNoticeBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-//        return ViewHolder.from(parent)
     }
 
     override fun getItemCount(): Int = notices.size

@@ -1,7 +1,7 @@
 package com.nishant4820.studentapp.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -27,15 +27,16 @@ class HomeActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
 
         navController = findNavController(R.id.fragmentContainerView)
-        appBarConfiguration = AppBarConfiguration(setOf(
-            R.id.eventsFragment,
-            R.id.resultsFragment,
-            R.id.attendanceFragment,
-            R.id.profileFragment
-        ))
+        appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.eventsFragment,
+                R.id.resultsFragment,
+                R.id.attendanceFragment,
+                R.id.profileFragment
+            )
+        )
         binding.bottomNavView.setupWithNavController(navController)
         setupActionBarWithNavController(navController, appBarConfiguration)
-
 
     }
 

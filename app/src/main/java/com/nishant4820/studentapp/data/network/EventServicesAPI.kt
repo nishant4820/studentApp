@@ -7,5 +7,5 @@ import retrofit2.http.GET
 interface EventServicesAPI {
 
     @GET("/eventservice/notice/getall")
-    suspend fun getAllNotices() : Response<NoticeResponse>
+    suspend fun getAllNotices(): Response<NoticeResponse>
 }
