@@ -3,7 +3,12 @@ package com.nishant4820.studentapp.data.models
 
 import com.google.gson.annotations.SerializedName
 
-class NoticeResponse : ArrayList<NoticeResponseItem>()
+data class NoticeResponse(
+    @SerializedName("status")
+    val status: Int,
+    @SerializedName("data")
+    val data: ArrayList<NoticeResponseItem>
+)
 
 data class NoticeResponseItem(
     @SerializedName("createdAt")

@@ -4,6 +4,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import coil.transform.CircleCropTransformation
+import coil.transform.RoundedCornersTransformation
+import com.nishant4820.studentapp.R
 import com.nishant4820.studentapp.data.models.NoticeResponse
 import com.nishant4820.studentapp.data.models.NoticeResponseItem
 import com.nishant4820.studentapp.databinding.ItemNoticeBinding
@@ -18,6 +22,13 @@ class NoticesAdapter: RecyclerView.Adapter<NoticesAdapter.ViewHolder>() {
         fun bind(notice: NoticeResponseItem) {
             binding.tvTitle.text = notice.name
             binding.tvDescription.text = notice.description
+            binding.ivBanner.load(notice.noticeFile) {
+                crossfade(true)
+                placeholder(R.drawable.iv_default_image)
+                error(R.drawable.ic_error_placeholder)
+//                transformations(CircleCropTransformation())
+                transformations(RoundedCornersTransformation(12f, 12f, 12f, 12f))
+            }
         }
 
     }
@@ -34,9 +45,9 @@ class NoticesAdapter: RecyclerView.Adapter<NoticesAdapter.ViewHolder>() {
     }
 
     fun setData(newData: NoticeResponse) {
-        val myDiffUtil = MyDiffUtil(notices, newData)
+        val myDiffUtil = MyDiffUtil(notices, newData.data)
         val diffUtilResult = DiffUtil.calculateDiff(myDiffUtil)
-        notices = newData
+        notices = newData.data
         diffUtilResult.dispatchUpdatesTo(this)
     }
 }

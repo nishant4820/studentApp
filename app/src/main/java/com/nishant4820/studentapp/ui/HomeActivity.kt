@@ -29,7 +29,7 @@ class HomeActivity : AppCompatActivity() {
         navController = findNavController(R.id.fragmentContainerView)
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.eventsFragment,
+                R.id.noticesFragment,
                 R.id.resultsFragment,
                 R.id.attendanceFragment,
                 R.id.profileFragment

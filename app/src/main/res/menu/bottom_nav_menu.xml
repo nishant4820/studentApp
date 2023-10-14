@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/eventsFragment"
-        android:title="Events"
-        android:icon="@drawable/ic_events" />
+    <item
+        android:id="@+id/noticesFragment"
+        android:icon="@drawable/ic_notices"
+        android:title="@string/notices" />
 
-    <item android:id="@+id/resultsFragment"
-        android:title="Results"
-        android:icon="@drawable/ic_results" />
+    <item
+        android:id="@+id/resultsFragment"
+        android:icon="@drawable/ic_results"
+        android:title="@string/results" />
 
-    <item android:id="@+id/attendanceFragment"
-        android:title="Attendance"
-        android:icon="@drawable/ic_attendance" />
+    <item
+        android:id="@+id/attendanceFragment"
+        android:icon="@drawable/ic_attendance"
+        android:title="@string/attendance" />
 
-    <item android:id="@+id/profileFragment"
-        android:title="Profile"
-        android:icon="@drawable/ic_profile" />
+    <item
+        android:id="@+id/profileFragment"
+        android:icon="@drawable/ic_profile"
+        android:title="@string/profile" />
 
 </menu>

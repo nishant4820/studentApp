@@ -71,9 +71,12 @@ dependencies {
 
     // Room Database
     implementation("androidx.room:room-runtime:2.5.2")
-    annotationProcessor("androidx.room:room-compiler:2.5.2")
     ksp("androidx.room:room-compiler:2.5.2")
+    ksp("androidx.room:room-compiler:2.5.2")
+    implementation("androidx.room:room-ktx:2.5.2")
 
+    // LiveData
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
 
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
@@ -81,6 +84,13 @@ dependencies {
 
     // Shimmer
     implementation("com.facebook.shimmer:shimmer:0.5.0")
+
+    // Coil
+    implementation("io.coil-kt:coil:2.4.0")
+
+    // Swipe To Refresh
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
 }
 
 kapt {

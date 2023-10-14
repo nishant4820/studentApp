@@ -7,4 +7,12 @@ object Constants {
     const val ARG_PARAM1 = "param1"
     const val ARG_PARAM2 = "param2"
 
+    // API Queries
+    const val ENROLLMENT_NUMBER = "enrollment"
+
+
+    // ROOM DATABASE
+    const val DATABASE_NAME  = "notices_database"
+    const val NOTICES_TABLE  = "notices_table"
+
 }

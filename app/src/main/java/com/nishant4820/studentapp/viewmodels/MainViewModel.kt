@@ -5,12 +5,16 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.nishant4820.studentapp.data.Repository
+import com.nishant4820.studentapp.data.database.NoticesEntity
 import com.nishant4820.studentapp.data.models.NoticeResponse
 import com.nishant4820.studentapp.utils.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import javax.inject.Inject
@@ -21,24 +25,47 @@ class MainViewModel @Inject constructor(
     application: Application
 ) : AndroidViewModel(application) {
 
-    var noticeResponse: MutableLiveData<NetworkResult<NoticeResponse>> = MutableLiveData()
+    /* ROOM DATABASE */
+
+    val readNotices: LiveData<List<NoticesEntity>> = repository.local.readNotices().asLiveData()
+
+    private fun insertNotices(noticesEntity: NoticesEntity) =
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.local.insertNotices(noticesEntity)
+        }
+
+
+    /* RETROFIT */
+
+    var noticesResponse: MutableLiveData<NetworkResult<NoticeResponse>> = MutableLiveData()
 
     fun getAllNotices() = viewModelScope.launch {
         getAllNoticesSafeCall()
     }
 
     private suspend fun getAllNoticesSafeCall() {
-        noticeResponse.value = NetworkResult.Loading()
+        noticesResponse.value = NetworkResult.Loading()
         if (hasInternetConnection()) {
             try {
                 val response = repository.remote.getAllNotices()
-                noticeResponse.value = handleAllNoticesResponse(response)
+                noticesResponse.value = handleAllNoticesResponse(response)
+
+                val notices = noticesResponse.value!!.data
+                if(notices != null) {
+                    offlineCacheNotices(notices)
+                }
+
             } catch (e: Exception) {
-                noticeResponse.value = NetworkResult.Error("Notices not found.")
+                noticesResponse.value = NetworkResult.Error("Notices not found.")
             }
         } else {
-            noticeResponse.value = NetworkResult.Error("No Internet Connection.")
+            noticesResponse.value = NetworkResult.Error("No Internet Connection.")
         }
+    }
+
+    private fun offlineCacheNotices(notices: NoticeResponse) {
+        val noticesEntity = NoticesEntity(notices)
+        insertNotices(noticesEntity)
     }
 
     private fun handleAllNoticesResponse(response: Response<NoticeResponse>): NetworkResult<NoticeResponse> {
@@ -51,7 +78,7 @@ class MainViewModel @Inject constructor(
                 return NetworkResult.Error("API Key Limited.")
             }
 
-            response.body()!!.isEmpty() -> {
+            response.body()!!.data.isEmpty() -> {
                 return NetworkResult.Error("Notices not found.")
             }
 
