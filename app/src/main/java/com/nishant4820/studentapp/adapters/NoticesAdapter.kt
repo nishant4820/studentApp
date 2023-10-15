@@ -50,4 +50,10 @@ class NoticesAdapter: RecyclerView.Adapter<NoticesAdapter.ViewHolder>() {
         notices = newData.data
         diffUtilResult.dispatchUpdatesTo(this)
     }
+
+    fun clearData() {
+        val size = notices.size
+        notices = emptyList()
+        notifyItemRangeRemoved(1, size)
+    }
 }

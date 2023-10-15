@@ -91,6 +91,9 @@ dependencies {
     // Swipe To Refresh
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
+    // Data Store (Shared Preferences)
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+
 }
 
 kapt {

@@ -9,8 +9,8 @@ class RemoteDataSource @Inject constructor(
     private val eventServicesAPI: EventServicesAPI
 ) {
 
-    suspend fun getAllNotices(): Response<NoticeResponse> {
-        return eventServicesAPI.getAllNotices()
+    suspend fun getAllNotices(queries: HashMap<String, String>): Response<NoticeResponse> {
+        return eventServicesAPI.getAllNotices(queries)
     }
 
 }

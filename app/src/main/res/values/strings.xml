@@ -47,4 +47,15 @@
     <string name="results">Results</string>
     <string name="attendance">Attendance</string>
     <string name="profile">Profile</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="apply">Apply</string>
+    <string name="society">Society</string>
+    <string name="nscc">NSCC</string>
+    <string name="iosd">IOSD</string>
+    <string name="hash_define">#DEFINE</string>
+    <string name="avaran">Avaran</string>
+    <string name="gdsc">GDSC</string>
+    <string name="posted_by">Posted by me</string>
+    <string name="filter_notices">Filter Notices</string>
 </resources>

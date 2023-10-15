@@ -17,7 +17,7 @@
         android:theme="@style/Theme.StudentApp"
         tools:targetApi="34">
         <activity
-            android:name=".ui.HomeActivity"
+            android:name=".ui.home.HomeActivity"
             android:exported="true"
             android:theme="@style/Theme.StudentApp">
             <intent-filter>

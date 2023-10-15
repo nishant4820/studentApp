@@ -1,4 +1,4 @@
-package com.nishant4820.studentapp.ui
+package com.nishant4820.studentapp.ui.home
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

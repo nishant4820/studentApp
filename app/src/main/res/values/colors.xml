@@ -2,6 +2,31 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="lightGray">#F9F9F9</color>
     <color name="mediumGray">#D1D1D1</color>
+    <color name="lightMediumGray">#80D1D1D1</color>
+    <color name="darkGray">#4B4B4B</color>
+    <color name="dark">#313C44</color>
+    <color name="darker">#151B20</color>
+    <color name="red">#FF4646</color>
+    <color name="yellow">#FFC114</color>
+    <color name="green">#00C980</color>
     <color name="colorPrimary">#FFFFFBFE</color>
+
+    <color name="colorCloudBurstText">#1F3151</color>
+    <color name="colorCloudBurstText15">#261F3151</color>
+    <color name="colorCloudBurstText20">#331F3151</color>
+    <color name="colorCloudBurstText40">#661F3151</color>
+    <color name="colorCloudBurstText50">#801F3151</color>
+    <color name="colorCloudBurstText60">#991F3151</color>
+    <color name="colorCloudBurstText70">#B31F3151</color>
+    <color name="colorCloudBurstText80">#CC1F3151</color>
+    <color name="colorCloudBurstText90">#E61F3151</color>
+    <color name="colorCatalinaBlue">#033176</color>
+
+    // Custom Chip Style
+    <color name="checkedChipBackgroundColor">#206200EA</color>
+    <color name="chipBackgroundColor">@color/lightGray</color>
+    <color name="checkedChipTextColor">#6200EA</color>
+    <color name="chipTextColor">@color/darkGray</color>
 </resources>

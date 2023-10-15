@@ -1,4 +1,4 @@
-package com.nishant4820.studentapp.ui
+package com.nishant4820.studentapp.ui.home.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater

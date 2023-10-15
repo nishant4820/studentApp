@@ -1,4 +1,4 @@
-package com.nishant4820.studentapp.ui
+package com.nishant4820.studentapp.ui.home.fragments.noticefragment
 
 import android.os.Bundle
 import android.util.Log
@@ -9,7 +9,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.nishant4820.studentapp.R
 import com.nishant4820.studentapp.adapters.NoticesAdapter
 import com.nishant4820.studentapp.databinding.FragmentNoticesBinding
 import com.nishant4820.studentapp.utils.Constants.ARG_PARAM1
@@ -17,6 +19,7 @@ import com.nishant4820.studentapp.utils.Constants.ARG_PARAM2
 import com.nishant4820.studentapp.utils.NetworkResult
 import com.nishant4820.studentapp.utils.observeOnce
 import com.nishant4820.studentapp.viewmodels.MainViewModel
+import com.nishant4820.studentapp.viewmodels.NoticesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -26,6 +29,7 @@ class NoticesFragment : Fragment() {
     private var param2: String? = null
     private val mAdapter by lazy { NoticesAdapter() }
     private val mainViewModel: MainViewModel by viewModels(ownerProducer = { requireActivity() })
+    private val noticesViewModel: NoticesViewModel by viewModels(ownerProducer = { requireActivity() })
     private var _binding: FragmentNoticesBinding? = null
     private val binding get() = _binding!!
 
@@ -43,20 +47,20 @@ class NoticesFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         _binding = FragmentNoticesBinding.inflate(inflater, container, false)
+        binding.shimmerViewContainer.startShimmer()
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            requestNotices()
+        }
+        binding.fabNoticeFilter.setOnClickListener {
+            findNavController().navigate(R.id.action_noticesFragment_to_noticesBottomSheetFragment)
+        }
+
         setupRecyclerView()
         // Used to read local database to set up data if available
         readDatabase()
         // Used to fetch data from remote even if data is available to update results
         requestNotices()
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.shimmerViewContainer.startShimmer()
-        binding.swipeRefreshLayout.setOnRefreshListener {
-            requestNotices()
-        }
     }
 
     private fun setupRecyclerView() {
@@ -68,11 +72,11 @@ class NoticesFragment : Fragment() {
     }
 
     private fun readDatabase() {
-        Log.d("Nishant", "NoticesFragment: readDatabase() called")
+        Log.d("Student Tag", "NoticesFragment: readDatabase() called")
         lifecycleScope.launch {
             mainViewModel.readNotices.observeOnce(viewLifecycleOwner) { database ->
                 if (database.isNotEmpty()) {
-                    Log.d("Nishant", "NoticesFragment: database is not empty")
+                    Log.d("Student Tag", "NoticesFragment: database is not empty")
                     mAdapter.setData(database[0].notices)
                     hideShimmerEffect()
                 }
@@ -81,20 +85,20 @@ class NoticesFragment : Fragment() {
     }
 
     private fun requestNotices() {
-        mainViewModel.getAllNotices()
+        mainViewModel.getAllNotices(noticesViewModel.applyQueries())
         mainViewModel.noticesResponse.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is NetworkResult.Success -> {
-                    hideShimmerEffect()
                     binding.llNoInternet.visibility = View.GONE
                     binding.swipeRefreshLayout.isRefreshing = false
                     response.data?.let { mAdapter.setData(it) }
+                    hideShimmerEffect()
                 }
 
                 is NetworkResult.Error -> {
-                    hideShimmerEffect()
                     binding.swipeRefreshLayout.isRefreshing = false
                     loadDataFromCache()
+                    hideShimmerEffect()
 //                    binding.tvError.text = response.message.toString()
                     Toast.makeText(
                         requireContext(),
@@ -104,7 +108,7 @@ class NoticesFragment : Fragment() {
                 }
 
                 is NetworkResult.Loading -> {
-//                    showShimmerEffect()
+                    showShimmerEffect()
                     binding.llNoInternet.visibility = View.GONE
                 }
             }

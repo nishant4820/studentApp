@@ -39,15 +39,15 @@ class MainViewModel @Inject constructor(
 
     var noticesResponse: MutableLiveData<NetworkResult<NoticeResponse>> = MutableLiveData()
 
-    fun getAllNotices() = viewModelScope.launch {
-        getAllNoticesSafeCall()
+    fun getAllNotices(queries: HashMap<String, String>) = viewModelScope.launch {
+        getAllNoticesSafeCall(queries)
     }
 
-    private suspend fun getAllNoticesSafeCall() {
+    private suspend fun getAllNoticesSafeCall(queries: HashMap<String, String>) {
         noticesResponse.value = NetworkResult.Loading()
         if (hasInternetConnection()) {
             try {
-                val response = repository.remote.getAllNotices()
+                val response = repository.remote.getAllNotices(queries)
                 noticesResponse.value = handleAllNoticesResponse(response)
 
                 val notices = noticesResponse.value!!.data
