@@ -7,6 +7,6 @@ import retrofit2.http.QueryMap
 
 interface EventServicesAPI {
 
-    @GET("/eventservice/notice/getall")
+    @GET("eventservice/notice/getall")
     suspend fun getAllNotices(@QueryMap queries: Map<String, String>): Response<NoticeResponse>
 }

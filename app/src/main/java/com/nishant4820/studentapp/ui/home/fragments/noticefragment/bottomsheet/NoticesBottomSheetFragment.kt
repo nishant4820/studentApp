@@ -1,7 +1,6 @@
 package com.nishant4820.studentapp.ui.home.fragments.noticefragment.bottomsheet
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,13 +9,11 @@ import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.chip.Chip
-import com.nishant4820.studentapp.R
 import com.nishant4820.studentapp.databinding.BottomSheetNoticesBinding
 import com.nishant4820.studentapp.utils.Constants.ARG_PARAM1
 import com.nishant4820.studentapp.utils.Constants.ARG_PARAM2
 import com.nishant4820.studentapp.viewmodels.NoticesViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Locale
 
 @AndroidEntryPoint
 class NoticesBottomSheetFragment : BottomSheetDialogFragment() {
@@ -50,18 +47,21 @@ class NoticesBottomSheetFragment : BottomSheetDialogFragment() {
             if (this.societyChipId != null) {
                 try {
                     binding.societyChipGroup.findViewById<Chip>(societyChipId!!).isChecked = true
-                } catch (_: Exception) { }
+                } catch (_: Exception) {
+                }
             }
         }
 
-        noticesViewModel.readIsUploadedByMe.asLiveData().observe(viewLifecycleOwner) { isUploadedByMe ->
-            this.isUploadedByMe = isUploadedByMe
-            if (this.isUploadedByMe != null) {
-                try {
-                    binding.uploadedByMeSwitch.isChecked = isUploadedByMe!!
-                } catch (_: Exception) { }
+        noticesViewModel.readIsUploadedByMe.asLiveData()
+            .observe(viewLifecycleOwner) { isUploadedByMe ->
+                this.isUploadedByMe = isUploadedByMe
+                if (this.isUploadedByMe != null) {
+                    try {
+                        binding.uploadedByMeSwitch.isChecked = isUploadedByMe!!
+                    } catch (_: Exception) {
+                    }
+                }
             }
-        }
 
         binding.societyChipGroup.setOnCheckedStateChangeListener { group, checkedIds ->
             if (checkedIds.size > 0) {
@@ -90,8 +90,11 @@ class NoticesBottomSheetFragment : BottomSheetDialogFragment() {
             } else {
                 noticesViewModel.deleteIsUploadedByMe()
             }
-
-            findNavController().navigate(R.id.action_noticesBottomSheetFragment_to_noticesFragment)
+            val action =
+                NoticesBottomSheetFragmentDirections.actionNoticesBottomSheetFragmentToNoticesFragment(
+                    true
+                )
+            findNavController().navigate(action)
         }
 
         return binding.root

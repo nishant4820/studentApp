@@ -6,6 +6,8 @@ import com.google.gson.annotations.SerializedName
 data class NoticeResponse(
     @SerializedName("status")
     val status: Int,
+    @SerializedName("message")
+    val message: String,
     @SerializedName("data")
     val data: ArrayList<NoticeResponseItem>
 )

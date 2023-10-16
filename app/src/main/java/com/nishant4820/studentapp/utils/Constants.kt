@@ -2,10 +2,11 @@ package com.nishant4820.studentapp.utils
 
 object Constants {
 
-    const val BASE_URL = "https://gateway-gazh.onrender.com"
+    const val BASE_URL = "https://gateway-gazh.onrender.com/"
 
     const val ARG_PARAM1 = "param1"
     const val ARG_PARAM2 = "param2"
+    const val LOG_TAG = "StudentLogTag"
 
     // API Queries
     const val ENROLLMENT_NUMBER = "enrollment"
@@ -15,8 +16,8 @@ object Constants {
     const val QUERY_LIMIT = "limit"
 
     // ROOM DATABASE
-    const val DATABASE_NAME  = "notices_database"
-    const val NOTICES_TABLE  = "notices_table"
+    const val DATABASE_NAME = "notices_database"
+    const val NOTICES_TABLE = "notices_table"
 
     // Bottom Sheet and Preferences
     const val DEFAULT_OFFSET = "0"
@@ -28,4 +29,17 @@ object Constants {
     const val PREFERENCES_SOCIETY = "selected_society"
     const val PREFERENCES_SOCIETY_CHIP_ID = "selected_society_chip_id"
     const val PREFERENCES_IS_UPLOADED_BY_ME = "is_uploaded_by_me"
+
+    // Network Result Status Codes
+    const val NETWORK_RESULT_STATUS_UNKNOWN = 0
+    const val NETWORK_RESULT_STATUS_NO_INTERNET = 1
+    const val NETWORK_RESULT_STATUS_TIMEOUT = 2
+    const val NETWORK_RESULT_STATUS_LOADING = 3
+
+    // Network Result Messages
+    const val NETWORK_RESULT_MESSAGE_UNKNOWN = "Some Error Occurred"
+    const val NETWORK_RESULT_MESSAGE_NO_INTERNET = "No Internet Connection"
+    const val NETWORK_RESULT_MESSAGE_TIMEOUT = "Request timed out"
+    const val NETWORK_RESULT_MESSAGE_LOADING = "Loading"
+    const val NETWORK_RESULT_MESSAGE_NO_RESULTS = "No Results found"
 }

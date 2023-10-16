@@ -13,6 +13,10 @@
         <action
             android:id="@+id/action_noticesFragment_to_noticesBottomSheetFragment"
             app:destination="@id/noticesBottomSheetFragment" />
+        <argument
+            android:name="backFromBottomSheet"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/resultsFragment"

@@ -10,12 +10,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.nishant4820.studentapp.R
 import com.nishant4820.studentapp.adapters.NoticesAdapter
 import com.nishant4820.studentapp.databinding.FragmentNoticesBinding
 import com.nishant4820.studentapp.utils.Constants.ARG_PARAM1
 import com.nishant4820.studentapp.utils.Constants.ARG_PARAM2
+import com.nishant4820.studentapp.utils.Constants.LOG_TAG
 import com.nishant4820.studentapp.utils.NetworkResult
 import com.nishant4820.studentapp.utils.observeOnce
 import com.nishant4820.studentapp.viewmodels.MainViewModel
@@ -27,6 +29,7 @@ import kotlinx.coroutines.launch
 class NoticesFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
+    private val args: NoticesFragmentArgs by navArgs()
     private val mAdapter by lazy { NoticesAdapter() }
     private val mainViewModel: MainViewModel by viewModels(ownerProducer = { requireActivity() })
     private val noticesViewModel: NoticesViewModel by viewModels(ownerProducer = { requireActivity() })
@@ -56,10 +59,9 @@ class NoticesFragment : Fragment() {
         }
 
         setupRecyclerView()
-        // Used to read local database to set up data if available
+
         readDatabase()
-        // Used to fetch data from remote even if data is available to update results
-        requestNotices()
+
         return binding.root
     }
 
@@ -72,21 +74,34 @@ class NoticesFragment : Fragment() {
     }
 
     private fun readDatabase() {
-        Log.d("Student Tag", "NoticesFragment: readDatabase() called")
         lifecycleScope.launch {
             mainViewModel.readNotices.observeOnce(viewLifecycleOwner) { database ->
-                if (database.isNotEmpty()) {
-                    Log.d("Student Tag", "NoticesFragment: database is not empty")
+                if (database.isNotEmpty() && !args.backFromBottomSheet) {
+                    Log.d(
+                        LOG_TAG,
+                        "Notices Fragment: Database is not empty, back from bottom sheet: ${args.backFromBottomSheet}"
+                    )
                     mAdapter.setData(database[0].notices)
                     hideShimmerEffect()
+                } else {
+                    Log.d(
+                        LOG_TAG,
+                        "Notices Fragment: Database is empty or back from bottom sheet: ${args.backFromBottomSheet}"
+                    )
+                    requestNotices()
                 }
             }
         }
     }
 
     private fun requestNotices() {
+        Log.d(LOG_TAG, "Notices Fragment: requestNotices")
         mainViewModel.getAllNotices(noticesViewModel.applyQueries())
         mainViewModel.noticesResponse.observe(viewLifecycleOwner) { response ->
+            Log.d(
+                LOG_TAG,
+                "Notices Fragment: Response observer, response code: ${response.statusCode}"
+            )
             when (response) {
                 is NetworkResult.Success -> {
                     binding.llNoInternet.visibility = View.GONE
@@ -99,7 +114,7 @@ class NoticesFragment : Fragment() {
                     binding.swipeRefreshLayout.isRefreshing = false
                     loadDataFromCache()
                     hideShimmerEffect()
-//                    binding.tvError.text = response.message.toString()
+                    binding.tvError.text = response.message.toString()
                     Toast.makeText(
                         requireContext(),
                         response.message.toString(),
@@ -108,6 +123,7 @@ class NoticesFragment : Fragment() {
                 }
 
                 is NetworkResult.Loading -> {
+                    Log.d(LOG_TAG, "Notices Fragment: shimmer effect from is loading state")
                     showShimmerEffect()
                     binding.llNoInternet.visibility = View.GONE
                 }
