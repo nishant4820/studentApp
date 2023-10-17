@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.nishant4820.studentapp.utils.Constants.PREFERENCES_BACK_ONLINE
 import com.nishant4820.studentapp.utils.Constants.PREFERENCES_ID
 import com.nishant4820.studentapp.utils.Constants.PREFERENCES_IS_UPLOADED_BY_ME
 import com.nishant4820.studentapp.utils.Constants.PREFERENCES_SOCIETY
@@ -31,6 +32,7 @@ class DataStoreRepository @Inject constructor(@ApplicationContext private val co
         val selectedSociety = stringPreferencesKey(PREFERENCES_SOCIETY)
         val selectedSocietyChipId = intPreferencesKey(PREFERENCES_SOCIETY_CHIP_ID)
         val isUploadedByMe = booleanPreferencesKey(PREFERENCES_IS_UPLOADED_BY_ME)
+        val backOnline = booleanPreferencesKey(PREFERENCES_BACK_ONLINE)
     }
 
     private val dataStore: DataStore<Preferences> = context.dataStore
@@ -60,6 +62,14 @@ class DataStoreRepository @Inject constructor(@ApplicationContext private val co
     ) {
         dataStore.edit { settings ->
             settings[PreferenceKeys.isUploadedByMe] = isUploadedByMe
+        }
+    }
+
+    suspend fun saveBackOnline(
+        backOnline: Boolean
+    ) {
+        dataStore.edit { settings ->
+            settings[PreferenceKeys.backOnline] = backOnline
         }
     }
 
@@ -103,6 +113,17 @@ class DataStoreRepository @Inject constructor(@ApplicationContext private val co
             preferences[PreferenceKeys.isUploadedByMe]
         }
 
+    val readBackOnline: Flow<Boolean> = dataStore.data
+        .catch { exception ->
+            if (exception is IOException) {
+                emit(emptyPreferences())
+            } else {
+                throw exception
+            }
+        }
+        .map { preferences ->
+            preferences[PreferenceKeys.backOnline] ?: false
+        }
 
     suspend fun deleteSelectedSociety() {
         dataStore.edit { settings ->

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -18,6 +19,7 @@ import com.nishant4820.studentapp.databinding.FragmentNoticesBinding
 import com.nishant4820.studentapp.utils.Constants.ARG_PARAM1
 import com.nishant4820.studentapp.utils.Constants.ARG_PARAM2
 import com.nishant4820.studentapp.utils.Constants.LOG_TAG
+import com.nishant4820.studentapp.utils.NetworkListener
 import com.nishant4820.studentapp.utils.NetworkResult
 import com.nishant4820.studentapp.utils.observeOnce
 import com.nishant4820.studentapp.viewmodels.MainViewModel
@@ -35,6 +37,7 @@ class NoticesFragment : Fragment() {
     private val noticesViewModel: NoticesViewModel by viewModels(ownerProducer = { requireActivity() })
     private var _binding: FragmentNoticesBinding? = null
     private val binding get() = _binding!!
+    private lateinit var networkListener: NetworkListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,12 +58,28 @@ class NoticesFragment : Fragment() {
             requestNotices()
         }
         binding.fabNoticeFilter.setOnClickListener {
-            findNavController().navigate(R.id.action_noticesFragment_to_noticesBottomSheetFragment)
+            if (noticesViewModel.networkStatus) {
+                findNavController().navigate(R.id.action_noticesFragment_to_noticesBottomSheetFragment)
+            } else {
+                noticesViewModel.showNetworkStatus()
+            }
         }
 
         setupRecyclerView()
 
-        readDatabase()
+        noticesViewModel.readBackOnline.asLiveData().observe(viewLifecycleOwner) {
+            noticesViewModel.backOnline = it
+        }
+
+        lifecycleScope.launch {
+            networkListener = NetworkListener()
+            networkListener.checkNetworkAvailability(requireContext()).collect { status ->
+                Log.d(LOG_TAG, "Notices Fragment: Network Status Observer, network status: $status")
+                noticesViewModel.networkStatus = status
+                noticesViewModel.showNetworkStatus()
+                readDatabase()
+            }
+        }
 
         return binding.root
     }

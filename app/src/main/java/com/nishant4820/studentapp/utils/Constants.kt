@@ -29,6 +29,7 @@ object Constants {
     const val PREFERENCES_SOCIETY = "selected_society"
     const val PREFERENCES_SOCIETY_CHIP_ID = "selected_society_chip_id"
     const val PREFERENCES_IS_UPLOADED_BY_ME = "is_uploaded_by_me"
+    const val PREFERENCES_BACK_ONLINE = "back_online"
 
     // Network Result Status Codes
     const val NETWORK_RESULT_STATUS_UNKNOWN = 0
