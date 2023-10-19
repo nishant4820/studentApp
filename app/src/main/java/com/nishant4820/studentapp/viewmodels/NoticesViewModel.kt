@@ -8,10 +8,12 @@ import com.nishant4820.studentapp.data.DataStoreRepository
 import com.nishant4820.studentapp.utils.Constants.DEFAULT_LIMIT
 import com.nishant4820.studentapp.utils.Constants.DEFAULT_OFFSET
 import com.nishant4820.studentapp.utils.Constants.NETWORK_RESULT_MESSAGE_NO_INTERNET
+import com.nishant4820.studentapp.utils.Constants.PREFERENCES_ID
 import com.nishant4820.studentapp.utils.Constants.QUERY_LIMIT
 import com.nishant4820.studentapp.utils.Constants.QUERY_OFFSET
 import com.nishant4820.studentapp.utils.Constants.QUERY_SOCIETY
 import com.nishant4820.studentapp.utils.Constants.QUERY_STUDENT_ID
+import com.orhanobut.hawk.Hawk
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -23,20 +25,19 @@ class NoticesViewModel @Inject constructor(
     application: Application
 ) : AndroidViewModel(application) {
 
-    private var selectedSociety: String? = null
-    private var studentId: String? = null
+    private var selectedSocietyId: String? = null
     private var isUploadedByMe: Boolean? = null
 
     var networkStatus = false
     var backOnline = false
 
-    val readSelectedSociety = dataStoreRepository.readSelectedSociety
+    val readSelectedSociety = dataStoreRepository.readSelectedSocietyLocal
     val readIsUploadedByMe = dataStoreRepository.readUploadedByMe
     val readBackOnline = dataStoreRepository.readBackOnline
 
-    fun saveSelectedSociety(selectedSociety: String, selectedSocietyChipId: Int) {
+    fun saveSelectedSociety(selectedSocietyId: String, selectedSocietyChipId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            dataStoreRepository.saveSelectedSociety(selectedSociety, selectedSocietyChipId)
+            dataStoreRepository.saveSelectedSociety(selectedSocietyId, selectedSocietyChipId)
         }
     }
 
@@ -68,7 +69,7 @@ class NoticesViewModel @Inject constructor(
 
         viewModelScope.launch {
             readSelectedSociety.collect { society ->
-                this@NoticesViewModel.selectedSociety = society.society
+                this@NoticesViewModel.selectedSocietyId = society.societyId
             }
         }
         viewModelScope.launch {
@@ -77,13 +78,13 @@ class NoticesViewModel @Inject constructor(
             }
         }
 
-        if (selectedSociety != null) {
-            queries[QUERY_SOCIETY] = selectedSociety!!
+        if (selectedSocietyId != null) {
+            queries[QUERY_SOCIETY] = selectedSocietyId!!
         }
 
         if (isUploadedByMe != null) {
-//            queries[QUERY_STUDENT_ID] = studentId!!
-            queries[QUERY_STUDENT_ID] = "65219da05ba04b4d50b19b0d"
+            val studentId = Hawk.get<String>(PREFERENCES_ID)
+            queries[QUERY_STUDENT_ID] = studentId
         }
 
         queries[QUERY_OFFSET] = DEFAULT_OFFSET

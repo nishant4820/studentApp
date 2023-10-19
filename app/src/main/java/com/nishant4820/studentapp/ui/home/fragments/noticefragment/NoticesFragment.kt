@@ -119,7 +119,7 @@ class NoticesFragment : Fragment() {
         mainViewModel.noticesResponse.observe(viewLifecycleOwner) { response ->
             Log.d(
                 LOG_TAG,
-                "Notices Fragment: Response observer, response code: ${response.statusCode}"
+                "Notices Fragment: Notices response observer, response code: ${response.statusCode}"
             )
             when (response) {
                 is NetworkResult.Success -> {

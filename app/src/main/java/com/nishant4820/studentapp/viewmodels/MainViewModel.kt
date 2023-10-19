@@ -11,8 +11,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.nishant4820.studentapp.data.Repository
-import com.nishant4820.studentapp.data.database.NoticesEntity
+import com.nishant4820.studentapp.data.database.notices.NoticesEntity
+import com.nishant4820.studentapp.data.database.settings.SettingsEntity
 import com.nishant4820.studentapp.data.models.NoticeResponse
+import com.nishant4820.studentapp.data.models.SettingsResponse
 import com.nishant4820.studentapp.utils.Constants.LOG_TAG
 import com.nishant4820.studentapp.utils.Constants.NETWORK_RESULT_MESSAGE_LOADING
 import com.nishant4820.studentapp.utils.Constants.NETWORK_RESULT_MESSAGE_NO_INTERNET
@@ -23,7 +25,9 @@ import com.nishant4820.studentapp.utils.Constants.NETWORK_RESULT_STATUS_LOADING
 import com.nishant4820.studentapp.utils.Constants.NETWORK_RESULT_STATUS_NO_INTERNET
 import com.nishant4820.studentapp.utils.Constants.NETWORK_RESULT_STATUS_TIMEOUT
 import com.nishant4820.studentapp.utils.Constants.NETWORK_RESULT_STATUS_UNKNOWN
+import com.nishant4820.studentapp.utils.Constants.PREFERENCES_TOKEN
 import com.nishant4820.studentapp.utils.NetworkResult
+import com.orhanobut.hawk.Hawk
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -45,8 +49,93 @@ class MainViewModel @Inject constructor(
             repository.local.insertNotices(noticesEntity)
         }
 
+    val readSettings: LiveData<List<SettingsEntity>> = repository.local.readSettings().asLiveData()
+
+    private fun insertSettings(settingsEntity: SettingsEntity) =
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.local.insertSettings(settingsEntity)
+        }
+
 
     /* RETROFIT */
+
+
+    var settingsResponse: MutableLiveData<NetworkResult<SettingsResponse>> = MutableLiveData()
+
+    fun getSettings() =
+        viewModelScope.launch {
+            getSettingsSafeCall()
+        }
+
+    private suspend fun getSettingsSafeCall() {
+        settingsResponse.value =
+            NetworkResult.Loading(NETWORK_RESULT_MESSAGE_LOADING, NETWORK_RESULT_STATUS_LOADING)
+        if (hasInternetConnection()) {
+            try {
+                val token = "Bearer ${Hawk.get<String>(PREFERENCES_TOKEN)}"
+                val response = repository.remote.getSettings(token)
+                settingsResponse.value = handleSettingsResponse(response)
+
+                if (settingsResponse.value is NetworkResult.Success) {
+                    val settings = settingsResponse.value!!.data
+                    if (settings != null) {
+                        saveSettingsInRoom(settings)
+                    }
+                }
+
+            } catch (e: Exception) {
+                Log.d(
+                    LOG_TAG,
+                    "Main Vew Model: getSettingsSafeCall, exception message: ${e.message}"
+                )
+                if (e.message.toString().contains("timeout")) {
+                    settingsResponse.value = NetworkResult.Error(
+                        NETWORK_RESULT_MESSAGE_TIMEOUT,
+                        NETWORK_RESULT_STATUS_TIMEOUT
+                    )
+                } else {
+                    settingsResponse.value =
+                        NetworkResult.Error(
+                            NETWORK_RESULT_MESSAGE_UNKNOWN,
+                            NETWORK_RESULT_STATUS_UNKNOWN
+                        )
+                }
+            }
+        } else {
+            Log.d(LOG_TAG, "Main Vew Model: getSettingsSafeCall, no internet actually")
+            settingsResponse.value = NetworkResult.Error(
+                NETWORK_RESULT_MESSAGE_NO_INTERNET,
+                NETWORK_RESULT_STATUS_NO_INTERNET
+            )
+        }
+    }
+
+    private fun saveSettingsInRoom(settings: SettingsResponse) {
+        val settingsEntity = SettingsEntity(settings)
+        insertSettings(settingsEntity)
+    }
+
+    private fun handleSettingsResponse(response: Response<SettingsResponse>): NetworkResult<SettingsResponse> {
+        Log.d(
+            LOG_TAG,
+            "Main Vew Model: handleSettingsResponse, response message: ${response.message()}, response code: ${response.code()}"
+        )
+        return when {
+            response.message().toString().contains("timeout") -> {
+                NetworkResult.Error(NETWORK_RESULT_MESSAGE_TIMEOUT, response.code())
+            }
+
+            response.isSuccessful -> {
+                val settings = response.body()
+                NetworkResult.Success(settings!!, response.message(), response.code())
+            }
+
+            else -> {
+                NetworkResult.Error(response.message(), response.code())
+            }
+        }
+    }
+
 
     var noticesResponse: MutableLiveData<NetworkResult<NoticeResponse>> = MutableLiveData()
 
@@ -61,10 +150,11 @@ class MainViewModel @Inject constructor(
             try {
                 val response = repository.remote.getAllNotices(queries)
                 noticesResponse.value = handleAllNoticesResponse(response)
-
-                val notices = noticesResponse.value!!.data
-                if (notices != null) {
-                    offlineCacheNotices(notices)
+                if (noticesResponse.value is NetworkResult.Success) {
+                    val notices = noticesResponse.value!!.data
+                    if (notices != null) {
+                        offlineCacheNotices(notices)
+                    }
                 }
 
             } catch (e: Exception) {

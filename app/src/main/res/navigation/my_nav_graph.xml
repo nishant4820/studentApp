@@ -39,6 +39,8 @@
         android:label="NoticesBottomSheetFragment" >
         <action
             android:id="@+id/action_noticesBottomSheetFragment_to_noticesFragment"
-            app:destination="@id/noticesFragment" />
+            app:destination="@id/noticesFragment"
+            app:popUpTo="@id/noticesFragment"
+            app:popUpToInclusive="true" />
     </dialog>
 </navigation>

@@ -9,10 +9,10 @@ data class NoticeResponse(
     @SerializedName("message")
     val message: String,
     @SerializedName("data")
-    val data: ArrayList<NoticeResponseItem>
+    val `data`: List<NoticeData>
 )
 
-data class NoticeResponseItem(
+data class NoticeData(
     @SerializedName("createdAt")
     val createdAt: String,
     @SerializedName("date")
@@ -26,11 +26,11 @@ data class NoticeResponseItem(
     @SerializedName("name")
     val name: String,
     @SerializedName("noticeFile")
-    val noticeFile: String,
+    val noticeFile: NoticeFile,
     @SerializedName("noticeType")
     val noticeType: String,
     @SerializedName("society")
-    val society: String,
+    val society: Society,
     @SerializedName("studentId")
     val studentId: String,
     @SerializedName("updatedAt")
@@ -44,4 +44,13 @@ data class Link(
     val linkName: String,
     @SerializedName("url")
     val url: String
+)
+
+data class Image(
+    @SerializedName("image_name")
+    val imageName: String,
+    @SerializedName("image_url")
+    val imageUrl: String,
+    @SerializedName("path")
+    val path: String
 )

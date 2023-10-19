@@ -4,11 +4,11 @@ import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.nishant4820.studentapp.data.models.NoticeResponse
-import com.nishant4820.studentapp.data.models.NoticeResponseItem
+import com.nishant4820.studentapp.data.models.SettingsResponse
 
-class NoticesTypeConverter {
+class MyTypeConverter {
 
-    var gson = Gson()
+    private var gson = Gson()
 
     @TypeConverter
     fun foodRecipeToString(foodRecipe: NoticeResponse): String {
@@ -22,14 +22,25 @@ class NoticesTypeConverter {
     }
 
 //    @TypeConverter
-//    fun dataToString(data: NoticeResponseItem): String {
+//    fun dataToString(data: NoticeData): String {
 //        return gson.toJson(data)
 //    }
 //
 //    @TypeConverter
-//    fun stringToData(data: String): NoticeResponseItem {
-//        val listType = object : TypeToken<NoticeResponseItem>() {}.type
+//    fun stringToData(data: String): NoticeData {
+//        val listType = object : TypeToken<NoticeData>() {}.type
 //        return gson.fromJson(data, listType)
 //    }
+
+    @TypeConverter
+    fun settingsToString(settings: SettingsResponse): String {
+        return gson.toJson(settings)
+    }
+
+    @TypeConverter
+    fun stringToSettings(data: String): SettingsResponse {
+        val listType = object : TypeToken<SettingsResponse>() {}.type
+        return gson.fromJson(data, listType)
+    }
 
 }

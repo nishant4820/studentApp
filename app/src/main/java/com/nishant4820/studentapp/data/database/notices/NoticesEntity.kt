@@ -1,4 +1,4 @@
-package com.nishant4820.studentapp.data.database
+package com.nishant4820.studentapp.data.database.notices
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

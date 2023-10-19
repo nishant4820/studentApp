@@ -2,7 +2,7 @@ package com.nishant4820.studentapp.di
 
 import android.content.Context
 import androidx.room.Room
-import com.nishant4820.studentapp.data.database.NoticesDatabase
+import com.nishant4820.studentapp.data.database.MyDatabase
 import com.nishant4820.studentapp.utils.Constants.DATABASE_NAME
 import dagger.Module
 import dagger.Provides
@@ -21,12 +21,16 @@ object DatabaseModule {
         @ApplicationContext context: Context
     ) = Room.databaseBuilder(
         context,
-        NoticesDatabase::class.java,
+        MyDatabase::class.java,
         DATABASE_NAME
     ).build()
 
     @Singleton
     @Provides
-    fun provideDao(database: NoticesDatabase) = database.noticesDao()
+    fun provideNoticesDao(database: MyDatabase) = database.noticesDao()
+
+    @Singleton
+    @Provides
+    fun provideSettingsDao(database: MyDatabase) = database.settingsDao()
 
 }

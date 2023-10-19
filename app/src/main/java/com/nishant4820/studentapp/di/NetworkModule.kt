@@ -1,6 +1,6 @@
 package com.nishant4820.studentapp.di
 
-import com.nishant4820.studentapp.data.network.EventServicesAPI
+import com.nishant4820.studentapp.data.network.ApiService
 import com.nishant4820.studentapp.utils.Constants
 import dagger.Module
 import dagger.Provides
@@ -46,7 +46,7 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideApiService(retrofit: Retrofit): EventServicesAPI {
-        return retrofit.create(EventServicesAPI::class.java)
+    fun provideApiService(retrofit: Retrofit): ApiService {
+        return retrofit.create(ApiService::class.java)
     }
 }

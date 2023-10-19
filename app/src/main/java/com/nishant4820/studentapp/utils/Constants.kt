@@ -16,8 +16,9 @@ object Constants {
     const val QUERY_LIMIT = "limit"
 
     // ROOM DATABASE
-    const val DATABASE_NAME = "notices_database"
+    const val DATABASE_NAME = "my_database"
     const val NOTICES_TABLE = "notices_table"
+    const val SETTINGS_TABLE = "settings_table"
 
     // Bottom Sheet and Preferences
     const val DEFAULT_OFFSET = "0"
