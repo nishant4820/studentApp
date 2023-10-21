@@ -96,6 +96,12 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     implementation("com.orhanobut:hawk:2.0.1")
 
+    // PDF Helper
+    implementation("com.tom-roush:pdfbox-android:2.0.27.0")
+
+    // Auto Dispose Coroutine Scope
+    implementation("com.github.satoshun.coroutine.autodispose:autodispose:0.3.1")
+
 }
 
 kapt {

@@ -2,12 +2,11 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/notice_card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="20dp"
     android:layout_marginTop="20dp"
-    android:outlineAmbientShadowColor="#40000000"
-    android:outlineSpotShadowColor="#40000000"
     app:cardCornerRadius="12dp"
     app:cardElevation="6dp">
 
@@ -21,11 +20,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:src="@drawable/iv_default_image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:layout_height="200dp" />
+            tools:layout_height="200dp"
+            tools:src="@drawable/iv_default_image" />
 
         <TextView
             android:id="@+id/tv_title"

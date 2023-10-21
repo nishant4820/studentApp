@@ -1,5 +1,7 @@
 package com.nishant4820.studentapp.adapters
 
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -13,6 +15,7 @@ import com.nishant4820.studentapp.data.models.NoticeResponse
 import com.nishant4820.studentapp.databinding.ItemNoticeBinding
 import com.nishant4820.studentapp.utils.Constants.LOG_TAG
 import com.nishant4820.studentapp.utils.MyDiffUtil
+import com.nishant4820.studentapp.utils.loadPdf
 
 class NoticesAdapter : RecyclerView.Adapter<NoticesAdapter.ViewHolder>() {
 
@@ -28,11 +31,20 @@ class NoticesAdapter : RecyclerView.Adapter<NoticesAdapter.ViewHolder>() {
             if (notice.noticeType == "img") {
                 binding.ivBanner.load(notice.noticeFile.fileUrl) {
                     crossfade(true)
-                    placeholder(R.drawable.iv_default_image)
-                    error(R.drawable.ic_error_placeholder)
-//                transformations(CircleCropTransformation())
+                    placeholder(R.drawable.ic_placeholder)
+                    error(R.drawable.ic_placeholder)
                     transformations(RoundedCornersTransformation(12f, 12f, 12f, 12f))
                 }
+            } else if (notice.noticeType == "pdf") {
+                try {
+                    loadPdf(binding.ivBanner, notice.noticeFile.fileUrl)
+                } catch (_: Exception) {
+                    binding.ivBanner.load(R.drawable.ic_pdf)
+                }
+            }
+            binding.noticeCardView.setOnClickListener {
+                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(notice.noticeFile.fileUrl))
+                it.context.startActivity(browserIntent)
             }
         }
 

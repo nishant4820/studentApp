@@ -58,4 +58,5 @@
     <string name="gdsc">GDSC</string>
     <string name="posted_by">Posted by me</string>
     <string name="filter_notices">Filter Notices</string>
+    <string name="some_error_occurred">Some Error Occurred..</string>
 </resources>

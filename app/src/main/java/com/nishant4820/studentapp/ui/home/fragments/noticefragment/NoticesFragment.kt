@@ -16,8 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.nishant4820.studentapp.R
 import com.nishant4820.studentapp.adapters.NoticesAdapter
 import com.nishant4820.studentapp.databinding.FragmentNoticesBinding
-import com.nishant4820.studentapp.utils.Constants.ARG_PARAM1
-import com.nishant4820.studentapp.utils.Constants.ARG_PARAM2
 import com.nishant4820.studentapp.utils.Constants.LOG_TAG
 import com.nishant4820.studentapp.utils.NetworkListener
 import com.nishant4820.studentapp.utils.NetworkResult
@@ -29,8 +27,6 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class NoticesFragment : Fragment() {
-    private var param1: String? = null
-    private var param2: String? = null
     private val args: NoticesFragmentArgs by navArgs()
     private val mAdapter by lazy { NoticesAdapter() }
     private val mainViewModel: MainViewModel by viewModels(ownerProducer = { requireActivity() })
@@ -38,14 +34,6 @@ class NoticesFragment : Fragment() {
     private var _binding: FragmentNoticesBinding? = null
     private val binding get() = _binding!!
     private lateinit var networkListener: NetworkListener
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -177,15 +165,4 @@ class NoticesFragment : Fragment() {
         _binding = null
     }
 
-    companion object {
-
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            NoticesFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 }
