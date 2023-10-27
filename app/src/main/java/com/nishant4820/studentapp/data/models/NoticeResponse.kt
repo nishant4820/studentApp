@@ -8,6 +8,8 @@ data class NoticeResponse(
     val status: Int,
     @SerializedName("message")
     val message: String,
+    @SerializedName("total")
+    val total: Int,
     @SerializedName("data")
     val `data`: List<NoticeData>
 )

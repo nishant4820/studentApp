@@ -2,7 +2,8 @@ package com.nishant4820.studentapp.utils
 
 object Constants {
 
-    const val BASE_URL = "https://gateway-gazh.onrender.com/"
+//    const val BASE_URL = "https://gateway-gazh.onrender.com/"
+    const val BASE_URL = "http://192.168.0.169:3000/"
 
     const val ARG_PARAM1 = "param1"
     const val ARG_PARAM2 = "param2"

@@ -1,9 +1,6 @@
 package com.nishant4820.studentapp.viewmodels
 
 import android.app.Application
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -17,12 +14,10 @@ import com.nishant4820.studentapp.data.models.NoticeResponse
 import com.nishant4820.studentapp.data.models.SettingsResponse
 import com.nishant4820.studentapp.utils.Constants.LOG_TAG
 import com.nishant4820.studentapp.utils.Constants.NETWORK_RESULT_MESSAGE_LOADING
-import com.nishant4820.studentapp.utils.Constants.NETWORK_RESULT_MESSAGE_NO_INTERNET
 import com.nishant4820.studentapp.utils.Constants.NETWORK_RESULT_MESSAGE_NO_RESULTS
 import com.nishant4820.studentapp.utils.Constants.NETWORK_RESULT_MESSAGE_TIMEOUT
 import com.nishant4820.studentapp.utils.Constants.NETWORK_RESULT_MESSAGE_UNKNOWN
 import com.nishant4820.studentapp.utils.Constants.NETWORK_RESULT_STATUS_LOADING
-import com.nishant4820.studentapp.utils.Constants.NETWORK_RESULT_STATUS_NO_INTERNET
 import com.nishant4820.studentapp.utils.Constants.NETWORK_RESULT_STATUS_TIMEOUT
 import com.nishant4820.studentapp.utils.Constants.NETWORK_RESULT_STATUS_UNKNOWN
 import com.nishant4820.studentapp.utils.Constants.PREFERENCES_TOKEN
@@ -70,43 +65,35 @@ class MainViewModel @Inject constructor(
     private suspend fun getSettingsSafeCall() {
         settingsResponse.value =
             NetworkResult.Loading(NETWORK_RESULT_MESSAGE_LOADING, NETWORK_RESULT_STATUS_LOADING)
-        if (hasInternetConnection()) {
-            try {
-                val token = "Bearer ${Hawk.get<String>(PREFERENCES_TOKEN)}"
-                val response = repository.remote.getSettings(token)
-                settingsResponse.value = handleSettingsResponse(response)
+        try {
+            val token = "Bearer ${Hawk.get<String>(PREFERENCES_TOKEN)}"
+            val response = repository.remote.getSettings(token)
+            settingsResponse.value = handleSettingsResponse(response)
 
-                if (settingsResponse.value is NetworkResult.Success) {
-                    val settings = settingsResponse.value!!.data
-                    if (settings != null) {
-                        saveSettingsInRoom(settings)
-                    }
-                }
-
-            } catch (e: Exception) {
-                Log.d(
-                    LOG_TAG,
-                    "Main Vew Model: getSettingsSafeCall, exception message: ${e.message}"
-                )
-                if (e.message.toString().contains("timeout")) {
-                    settingsResponse.value = NetworkResult.Error(
-                        NETWORK_RESULT_MESSAGE_TIMEOUT,
-                        NETWORK_RESULT_STATUS_TIMEOUT
-                    )
-                } else {
-                    settingsResponse.value =
-                        NetworkResult.Error(
-                            NETWORK_RESULT_MESSAGE_UNKNOWN,
-                            NETWORK_RESULT_STATUS_UNKNOWN
-                        )
+            if (settingsResponse.value is NetworkResult.Success) {
+                val settings = settingsResponse.value!!.data
+                if (settings != null) {
+                    saveSettingsInRoom(settings)
                 }
             }
-        } else {
-            Log.d(LOG_TAG, "Main Vew Model: getSettingsSafeCall, no internet actually")
-            settingsResponse.value = NetworkResult.Error(
-                NETWORK_RESULT_MESSAGE_NO_INTERNET,
-                NETWORK_RESULT_STATUS_NO_INTERNET
+
+        } catch (e: Exception) {
+            Log.d(
+                LOG_TAG,
+                "Main Vew Model: getSettingsSafeCall, exception message: ${e.message}"
             )
+            if (e.message.toString().contains("timeout")) {
+                settingsResponse.value = NetworkResult.Error(
+                    NETWORK_RESULT_MESSAGE_TIMEOUT,
+                    NETWORK_RESULT_STATUS_TIMEOUT
+                )
+            } else {
+                settingsResponse.value =
+                    NetworkResult.Error(
+                        NETWORK_RESULT_MESSAGE_UNKNOWN,
+                        NETWORK_RESULT_STATUS_UNKNOWN
+                    )
+            }
         }
     }
 
@@ -139,48 +126,41 @@ class MainViewModel @Inject constructor(
 
     var noticesResponse: MutableLiveData<NetworkResult<NoticeResponse>> = MutableLiveData()
 
-    fun getAllNotices(queries: HashMap<String, String>) = viewModelScope.launch {
-        getAllNoticesSafeCall(queries)
-    }
+    fun getAllNotices(queries: HashMap<String, String>) =
+        viewModelScope.launch {
+            getAllNoticesSafeCall(queries)
+        }
 
     private suspend fun getAllNoticesSafeCall(queries: HashMap<String, String>) {
         noticesResponse.value =
             NetworkResult.Loading(NETWORK_RESULT_MESSAGE_LOADING, NETWORK_RESULT_STATUS_LOADING)
-        if (hasInternetConnection()) {
-            try {
-                val response = repository.remote.getAllNotices(queries)
-                noticesResponse.value = handleAllNoticesResponse(response)
-                if (noticesResponse.value is NetworkResult.Success) {
-                    val notices = noticesResponse.value!!.data
-                    if (notices != null) {
-                        offlineCacheNotices(notices)
-                    }
-                }
-
-            } catch (e: Exception) {
-                Log.d(
-                    LOG_TAG,
-                    "Main Vew Model: getAllNoticesSafeCall, exception message: ${e.message}"
-                )
-                if (e.message.toString().contains("timeout")) {
-                    noticesResponse.value = NetworkResult.Error(
-                        NETWORK_RESULT_MESSAGE_TIMEOUT,
-                        NETWORK_RESULT_STATUS_TIMEOUT
-                    )
-                } else {
-                    noticesResponse.value =
-                        NetworkResult.Error(
-                            NETWORK_RESULT_MESSAGE_UNKNOWN,
-                            NETWORK_RESULT_STATUS_UNKNOWN
-                        )
+        try {
+            val response = repository.remote.getAllNotices(queries)
+            noticesResponse.value = handleAllNoticesResponse(response)
+            if (noticesResponse.value is NetworkResult.Success) {
+                val notices = noticesResponse.value!!.data
+                if (notices != null) {
+                    offlineCacheNotices(notices)
                 }
             }
-        } else {
-            Log.d(LOG_TAG, "Main Vew Model: getAllNoticesSafeCall, no internet actually")
-            noticesResponse.value = NetworkResult.Error(
-                NETWORK_RESULT_MESSAGE_NO_INTERNET,
-                NETWORK_RESULT_STATUS_NO_INTERNET
+
+        } catch (e: Exception) {
+            Log.d(
+                LOG_TAG,
+                "Main Vew Model: getAllNoticesSafeCall, exception message: ${e.message}"
             )
+            if (e.message.toString().contains("timeout")) {
+                noticesResponse.value = NetworkResult.Error(
+                    NETWORK_RESULT_MESSAGE_TIMEOUT,
+                    NETWORK_RESULT_STATUS_TIMEOUT
+                )
+            } else {
+                noticesResponse.value =
+                    NetworkResult.Error(
+                        NETWORK_RESULT_MESSAGE_UNKNOWN,
+                        NETWORK_RESULT_STATUS_UNKNOWN
+                    )
+            }
         }
     }
 
@@ -211,20 +191,6 @@ class MainViewModel @Inject constructor(
             else -> {
                 return NetworkResult.Error(response.message(), response.code())
             }
-        }
-    }
-
-    private fun hasInternetConnection(): Boolean {
-        val connectivityManager = getApplication<Application>().getSystemService(
-            Context.CONNECTIVITY_SERVICE
-        ) as ConnectivityManager
-        val activeNetwork = connectivityManager.activeNetwork ?: return false
-        val capabilities = connectivityManager.getNetworkCapabilities(activeNetwork) ?: return false
-        return when {
-            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-            else -> false
         }
     }
 

@@ -18,9 +18,10 @@ import com.nishant4820.studentapp.R
 import com.nishant4820.studentapp.adapters.NoticesAdapter
 import com.nishant4820.studentapp.databinding.FragmentNoticesBinding
 import com.nishant4820.studentapp.utils.Constants.LOG_TAG
+import com.nishant4820.studentapp.utils.Constants.NETWORK_RESULT_MESSAGE_NO_INTERNET
 import com.nishant4820.studentapp.utils.NetworkListener
 import com.nishant4820.studentapp.utils.NetworkResult
-import com.nishant4820.studentapp.utils.observeOnce
+import com.nishant4820.studentapp.utils.NetworkUtils
 import com.nishant4820.studentapp.viewmodels.MainViewModel
 import com.nishant4820.studentapp.viewmodels.NoticesViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,9 +33,10 @@ class NoticesFragment : Fragment() {
     private val mAdapter by lazy { NoticesAdapter() }
     private val mainViewModel: MainViewModel by viewModels(ownerProducer = { requireActivity() })
     private val noticesViewModel: NoticesViewModel by viewModels(ownerProducer = { requireActivity() })
+    private var isFirstNetworkCallback = true
+    private lateinit var networkListener: NetworkListener
     private var _binding: FragmentNoticesBinding? = null
     private val binding get() = _binding!!
-    private lateinit var networkListener: NetworkListener
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,7 +46,16 @@ class NoticesFragment : Fragment() {
         _binding = FragmentNoticesBinding.inflate(inflater, container, false)
         binding.shimmerViewContainer.startShimmer()
         binding.swipeRefreshLayout.setOnRefreshListener {
-            requestNotices()
+            if (NetworkUtils.isNetworkAvailable(requireContext())) {
+                requestNotices()
+            } else {
+                binding.swipeRefreshLayout.isRefreshing = false
+                Toast.makeText(
+                    requireContext(),
+                    NETWORK_RESULT_MESSAGE_NO_INTERNET,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
         binding.fabNoticeFilter.setOnClickListener {
             if (noticesViewModel.networkStatus) {
@@ -56,7 +67,7 @@ class NoticesFragment : Fragment() {
 
         setupRecyclerView()
 
-        binding.nestedScrollView.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+        binding.nestedScrollView.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
             if (v.getChildAt(0).bottom <= v.height + scrollY) {
                 Log.d(LOG_TAG, "NoticesFragment: nestedScrollView end detected")
             }
@@ -67,12 +78,21 @@ class NoticesFragment : Fragment() {
         }
 
         lifecycleScope.launch {
-            networkListener = NetworkListener()
-            networkListener.checkNetworkAvailability(requireContext()).collect { status ->
-                Log.d(LOG_TAG, "Notices Fragment: Network Status Observer, network status: $status")
-                noticesViewModel.networkStatus = status
+            networkListener = NetworkListener(requireContext())
+            networkListener.networkAvailability.collect { networkStatus ->
+                Log.d(
+                    LOG_TAG,
+                    "Notices Fragment: Network Status Observer, network status: $networkStatus"
+                )
+                noticesViewModel.networkStatus = networkStatus
                 noticesViewModel.showNetworkStatus()
-                readDatabase()
+                if (networkStatus) {
+                    requestNotices()
+                } else if (isFirstNetworkCallback) {
+                    binding.tvError.text = NETWORK_RESULT_MESSAGE_NO_INTERNET
+                    loadDataFromCache()
+                }
+                isFirstNetworkCallback = false
             }
         }
 
@@ -84,32 +104,11 @@ class NoticesFragment : Fragment() {
             adapter = mAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
-        showShimmerEffect()
-    }
-
-    private fun readDatabase() {
-        lifecycleScope.launch {
-            mainViewModel.readNotices.observeOnce(viewLifecycleOwner) { database ->
-                if (database.isNotEmpty() && !args.backFromBottomSheet) {
-                    Log.d(
-                        LOG_TAG,
-                        "Notices Fragment: Database is not empty, back from bottom sheet: ${args.backFromBottomSheet}"
-                    )
-                    mAdapter.setData(database[0].notices)
-                    hideShimmerEffect()
-                } else {
-                    Log.d(
-                        LOG_TAG,
-                        "Notices Fragment: Database is empty or back from bottom sheet: ${args.backFromBottomSheet}"
-                    )
-                    requestNotices()
-                }
-            }
-        }
     }
 
     private fun requestNotices() {
         Log.d(LOG_TAG, "Notices Fragment: requestNotices")
+        showShimmerEffect()
         mainViewModel.getAllNotices(noticesViewModel.applyQueries())
         mainViewModel.noticesResponse.observe(viewLifecycleOwner) { response ->
             Log.d(
@@ -126,9 +125,9 @@ class NoticesFragment : Fragment() {
 
                 is NetworkResult.Error -> {
                     binding.swipeRefreshLayout.isRefreshing = false
+                    binding.tvError.text = response.message.toString()
                     loadDataFromCache()
                     hideShimmerEffect()
-                    binding.tvError.text = response.message.toString()
                     Toast.makeText(
                         requireContext(),
                         response.message.toString(),

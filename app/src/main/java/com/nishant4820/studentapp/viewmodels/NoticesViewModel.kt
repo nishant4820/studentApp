@@ -29,6 +29,8 @@ class NoticesViewModel @Inject constructor(
     private var isUploadedByMe: Boolean? = null
 
     var networkStatus = false
+
+    // Back Online is used to check if user if coming back to online state from offline state or the user was originally online.
     var backOnline = false
 
     val readSelectedSociety = dataStoreRepository.readSelectedSocietyLocal

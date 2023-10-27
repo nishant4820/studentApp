@@ -36,7 +36,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <!-- Adding 5 rows of placeholders -->
                         <LinearLayout
@@ -107,6 +108,6 @@
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginBottom="16dp"
         android:contentDescription="@string/filter_notices"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        app:srcCompat="@android:drawable/ic_search_category_default" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

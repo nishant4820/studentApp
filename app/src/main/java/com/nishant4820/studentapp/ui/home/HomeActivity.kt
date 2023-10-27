@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -12,9 +13,11 @@ import androidx.navigation.ui.setupWithNavController
 import com.nishant4820.studentapp.R
 import com.nishant4820.studentapp.databinding.ActivityHomeBinding
 import com.nishant4820.studentapp.utils.Constants.LOG_TAG
+import com.nishant4820.studentapp.utils.NetworkListener
 import com.nishant4820.studentapp.utils.NetworkResult
 import com.nishant4820.studentapp.viewmodels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
@@ -22,6 +25,7 @@ class HomeActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityHomeBinding
     private lateinit var navController: NavController
+    private lateinit var networkListener: NetworkListener
     private val mainViewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +48,18 @@ class HomeActivity : AppCompatActivity() {
         binding.bottomNavView.setupWithNavController(navController)
         setupActionBarWithNavController(navController, appBarConfiguration)
 
-        getSettings()
+        lifecycleScope.launch {
+            networkListener = NetworkListener(this@HomeActivity)
+            networkListener.networkAvailability.collect { networkStatus ->
+                Log.d(
+                    LOG_TAG,
+                    "Home Activity: Network Status Observer, network status: $networkStatus"
+                )
+                if (networkStatus) {
+                    getSettings()
+                }
+            }
+        }
 
     }
 
