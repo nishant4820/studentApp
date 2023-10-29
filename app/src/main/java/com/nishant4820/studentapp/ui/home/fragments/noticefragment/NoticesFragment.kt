@@ -1,24 +1,26 @@
 package com.nishant4820.studentapp.ui.home.fragments.noticefragment
 
+import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.nishant4820.studentapp.R
 import com.nishant4820.studentapp.adapters.NoticesAdapter
 import com.nishant4820.studentapp.databinding.FragmentNoticesBinding
 import com.nishant4820.studentapp.utils.Constants.LOG_TAG
 import com.nishant4820.studentapp.utils.Constants.NETWORK_RESULT_MESSAGE_NO_INTERNET
+import com.nishant4820.studentapp.utils.Constants.NETWORK_RESULT_MESSAGE_NO_RESULTS
 import com.nishant4820.studentapp.utils.NetworkListener
 import com.nishant4820.studentapp.utils.NetworkResult
 import com.nishant4820.studentapp.utils.NetworkUtils
@@ -29,7 +31,6 @@ import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class NoticesFragment : Fragment() {
-    private val args: NoticesFragmentArgs by navArgs()
     private val mAdapter by lazy { NoticesAdapter() }
     private val mainViewModel: MainViewModel by viewModels(ownerProducer = { requireActivity() })
     private val noticesViewModel: NoticesViewModel by viewModels(ownerProducer = { requireActivity() })
@@ -50,11 +51,13 @@ class NoticesFragment : Fragment() {
                 requestNotices()
             } else {
                 binding.swipeRefreshLayout.isRefreshing = false
-                Toast.makeText(
-                    requireContext(),
+                Snackbar.make(
+                    binding.root,
                     NETWORK_RESULT_MESSAGE_NO_INTERNET,
-                    Toast.LENGTH_SHORT
-                ).show()
+                    Snackbar.LENGTH_SHORT
+                ).setAction("Settings") {
+                    startActivity(Intent(Settings.ACTION_WIRELESS_SETTINGS))
+                }.show()
             }
         }
         binding.fabNoticeFilter.setOnClickListener {
@@ -96,6 +99,52 @@ class NoticesFragment : Fragment() {
             }
         }
 
+        mainViewModel.noticesResponse.observe(viewLifecycleOwner) { response ->
+            Log.d(
+                LOG_TAG,
+                "Notices Fragment: Notices response observer, response code: ${response.statusCode}"
+            )
+            when (response) {
+                is NetworkResult.Success -> {
+                    binding.llNoInternet.visibility = View.GONE
+                    binding.swipeRefreshLayout.isRefreshing = false
+                    response.data?.let { mAdapter.setData(it) }
+                    hideShimmerEffect()
+                    if (response.message == NETWORK_RESULT_MESSAGE_NO_RESULTS) {
+                        Snackbar.make(
+                            binding.root,
+                            NETWORK_RESULT_MESSAGE_NO_RESULTS,
+                            Snackbar.LENGTH_SHORT
+                        ).setAction("Filters") {
+                            binding.fabNoticeFilter.performClick()
+                        }.show()
+
+                        binding.tvError.text = NETWORK_RESULT_MESSAGE_NO_RESULTS
+                        binding.llNoInternet.visibility = View.VISIBLE
+                    }
+                }
+
+                is NetworkResult.Error -> {
+                    binding.llNoInternet.visibility = View.GONE
+                    binding.swipeRefreshLayout.isRefreshing = false
+                    binding.tvError.text = response.message.toString()
+                    loadDataFromCache()
+                    hideShimmerEffect()
+                    Snackbar.make(
+                        binding.root,
+                        response.message.toString(),
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+
+                is NetworkResult.Loading -> {
+                    Log.d(LOG_TAG, "Notices Fragment: shimmer effect from is loading state")
+                    showShimmerEffect()
+                    binding.llNoInternet.visibility = View.GONE
+                }
+            }
+        }
+
         return binding.root
     }
 
@@ -110,38 +159,6 @@ class NoticesFragment : Fragment() {
         Log.d(LOG_TAG, "Notices Fragment: requestNotices")
         showShimmerEffect()
         mainViewModel.getAllNotices(noticesViewModel.applyQueries())
-        mainViewModel.noticesResponse.observe(viewLifecycleOwner) { response ->
-            Log.d(
-                LOG_TAG,
-                "Notices Fragment: Notices response observer, response code: ${response.statusCode}"
-            )
-            when (response) {
-                is NetworkResult.Success -> {
-                    binding.llNoInternet.visibility = View.GONE
-                    binding.swipeRefreshLayout.isRefreshing = false
-                    response.data?.let { mAdapter.setData(it) }
-                    hideShimmerEffect()
-                }
-
-                is NetworkResult.Error -> {
-                    binding.swipeRefreshLayout.isRefreshing = false
-                    binding.tvError.text = response.message.toString()
-                    loadDataFromCache()
-                    hideShimmerEffect()
-                    Toast.makeText(
-                        requireContext(),
-                        response.message.toString(),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-
-                is NetworkResult.Loading -> {
-                    Log.d(LOG_TAG, "Notices Fragment: shimmer effect from is loading state")
-                    showShimmerEffect()
-                    binding.llNoInternet.visibility = View.GONE
-                }
-            }
-        }
     }
 
     private fun loadDataFromCache() {

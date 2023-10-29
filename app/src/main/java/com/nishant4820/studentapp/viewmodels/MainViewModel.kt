@@ -66,7 +66,7 @@ class MainViewModel @Inject constructor(
         settingsResponse.value =
             NetworkResult.Loading(NETWORK_RESULT_MESSAGE_LOADING, NETWORK_RESULT_STATUS_LOADING)
         try {
-            val token = "Bearer ${Hawk.get<String>(PREFERENCES_TOKEN)}"
+            val token = Hawk.get<String>(PREFERENCES_TOKEN)
             val response = repository.remote.getSettings(token)
             settingsResponse.value = handleSettingsResponse(response)
 
@@ -179,13 +179,10 @@ class MainViewModel @Inject constructor(
                 return NetworkResult.Error(NETWORK_RESULT_MESSAGE_TIMEOUT, response.code())
             }
 
-            (response.code() == 201 || response.body()!!.message == "Notices are empty" || response.body()!!.data.isEmpty()) -> {
-                return NetworkResult.Error(NETWORK_RESULT_MESSAGE_NO_RESULTS, response.code())
-            }
-
             response.isSuccessful -> {
-                val notices = response.body()
-                return NetworkResult.Success(notices!!, response.message(), response.code())
+                val notices = response.body()!!
+                val message = if(notices.data.isEmpty()) NETWORK_RESULT_MESSAGE_NO_RESULTS else response.message()
+                return NetworkResult.Success(notices, message, response.code())
             }
 
             else -> {

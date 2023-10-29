@@ -91,11 +91,7 @@ class NoticesBottomSheetFragment : BottomSheetDialogFragment() {
             } else {
                 noticesViewModel.deleteIsUploadedByMe()
             }
-            val action =
-                NoticesBottomSheetFragmentDirections.actionNoticesBottomSheetFragmentToNoticesFragment(
-                    true
-                )
-            findNavController().navigate(action)
+            findNavController().navigate(R.id.action_noticesBottomSheetFragment_to_noticesFragment)
         }
 
         return binding.root

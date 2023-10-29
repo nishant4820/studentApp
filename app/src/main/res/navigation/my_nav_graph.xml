@@ -8,30 +8,26 @@
     <fragment
         android:id="@+id/noticesFragment"
         android:name="com.nishant4820.studentapp.ui.home.fragments.noticefragment.NoticesFragment"
-        android:label="Notices"
+        android:label="@string/notices"
         tools:layout="@layout/fragment_notices" >
         <action
             android:id="@+id/action_noticesFragment_to_noticesBottomSheetFragment"
             app:destination="@id/noticesBottomSheetFragment" />
-        <argument
-            android:name="backFromBottomSheet"
-            app:argType="boolean"
-            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/resultsFragment"
         android:name="com.nishant4820.studentapp.ui.home.fragments.resultsFragment.ResultsFragment"
-        android:label="Results"
+        android:label="@string/results"
         tools:layout="@layout/fragment_results" />
     <fragment
         android:id="@+id/attendanceFragment"
         android:name="com.nishant4820.studentapp.ui.home.fragments.attendanceFragment.AttendanceFragment"
-        android:label="Attendance"
+        android:label="@string/attendance"
         tools:layout="@layout/fragment_attendance" />
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.nishant4820.studentapp.ui.home.fragments.profileFragment.ProfileFragment"
-        android:label="Profile"
+        android:label="@string/profile"
         tools:layout="@layout/fragment_profile" />
     <dialog
         android:id="@+id/noticesBottomSheetFragment"

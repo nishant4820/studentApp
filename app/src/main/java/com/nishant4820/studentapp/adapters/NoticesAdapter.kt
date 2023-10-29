@@ -36,11 +36,7 @@ class NoticesAdapter : RecyclerView.Adapter<NoticesAdapter.ViewHolder>() {
                     transformations(RoundedCornersTransformation(12f, 12f, 12f, 12f))
                 }
             } else if (notice.noticeType == "pdf") {
-                try {
-                    loadPdf(binding.ivBanner, notice.noticeFile.fileUrl)
-                } catch (_: Exception) {
-                    binding.ivBanner.load(R.drawable.ic_pdf)
-                }
+                loadPdf(binding.ivBanner, notice.noticeFile.fileUrl)
             }
             binding.noticeCardView.setOnClickListener {
                 val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(notice.noticeFile.fileUrl))

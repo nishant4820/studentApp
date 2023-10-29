@@ -28,6 +28,7 @@ object Constants {
     const val PREFERENCES_NAME = "student_settings"
     const val PREFERENCES_TOKEN = "student_token"
     const val PREFERENCES_ID = "student_id"
+    const val PREFERENCES_ENROLLMENT = "student_enrollment"
     const val PREFERENCES_SOCIETY = "selected_society"
     const val PREFERENCES_SOCIETY_CHIP_ID = "selected_society_chip_id"
     const val PREFERENCES_IS_UPLOADED_BY_ME = "is_uploaded_by_me"
@@ -44,5 +45,5 @@ object Constants {
     const val NETWORK_RESULT_MESSAGE_NO_INTERNET = "No Internet Connection"
     const val NETWORK_RESULT_MESSAGE_TIMEOUT = "Request timed out"
     const val NETWORK_RESULT_MESSAGE_LOADING = "Loading"
-    const val NETWORK_RESULT_MESSAGE_NO_RESULTS = "No Results found"
+    const val NETWORK_RESULT_MESSAGE_NO_RESULTS = "No results found"
 }
