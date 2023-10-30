@@ -14,6 +14,7 @@
     <string name="results">Results</string>
     <string name="attendance">Attendance</string>
     <string name="profile">Profile</string>
+    <string name="notice_detail">Notice Detail</string>
 
     <!-- Login Fragment Strings -->
     <string name="prompt_password">Password</string>

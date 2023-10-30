@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.nishant4820.studentapp.R
 import com.nishant4820.studentapp.adapters.NoticesAdapter
+import com.nishant4820.studentapp.data.models.NoticeData
 import com.nishant4820.studentapp.databinding.FragmentNoticesBinding
 import com.nishant4820.studentapp.utils.Constants.LOG_TAG
 import com.nishant4820.studentapp.utils.Constants.NETWORK_RESULT_MESSAGE_NO_INTERNET
@@ -24,14 +25,15 @@ import com.nishant4820.studentapp.utils.Constants.NETWORK_RESULT_MESSAGE_NO_RESU
 import com.nishant4820.studentapp.utils.NetworkListener
 import com.nishant4820.studentapp.utils.NetworkResult
 import com.nishant4820.studentapp.utils.NetworkUtils
+import com.nishant4820.studentapp.utils.OnListItemClickListener
 import com.nishant4820.studentapp.viewmodels.MainViewModel
 import com.nishant4820.studentapp.viewmodels.NoticesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class NoticesFragment : Fragment() {
-    private val mAdapter by lazy { NoticesAdapter() }
+class NoticesFragment : Fragment(), OnListItemClickListener {
+    private val mAdapter by lazy { NoticesAdapter(this) }
     private val mainViewModel: MainViewModel by viewModels(ownerProducer = { requireActivity() })
     private val noticesViewModel: NoticesViewModel by viewModels(ownerProducer = { requireActivity() })
     private var isFirstNetworkCallback = true
@@ -186,6 +188,20 @@ class NoticesFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onItemClick(object1: Any?, object2: Any?, object3: Any?, position: Int) {
+        if (object1 is NoticeData) {
+            Log.d(LOG_TAG, "NoticesFragment: onItemClick, Notice Card clicked")
+            try {
+                val action = NoticesFragmentDirections.actionNoticesFragmentToNoticeDetailActivity(
+                    object1
+                )
+                findNavController().navigate(action)
+            } catch (e: Exception) {
+                Log.d(LOG_TAG, "NoticesFragment: onItemClick, exception in navigating to Notice Detail Activity, exception message: ${e.message}")
+            }
+        }
     }
 
 }

@@ -34,6 +34,10 @@
             android:name=".ui.home.HomeActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.noticeDetail.NoticeDetailActivity"
+            android:exported="false"
+            android:label="@string/notice_detail" />
+        <activity
             android:name=".MainActivity"
             android:exported="false" />
     </application>

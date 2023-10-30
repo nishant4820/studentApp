@@ -1,7 +1,10 @@
 package com.nishant4820.studentapp.data.models
 
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
+import kotlinx.parcelize.RawValue
 
 data class NoticeResponse(
     @SerializedName("status")
@@ -14,6 +17,7 @@ data class NoticeResponse(
     val `data`: List<NoticeData>
 )
 
+@Parcelize
 data class NoticeData(
     @SerializedName("createdAt")
     val createdAt: String,
@@ -24,21 +28,22 @@ data class NoticeData(
     @SerializedName("_id")
     val id: String,
     @SerializedName("Links")
-    val links: List<Link>,
+    val links: @RawValue List<Link>,
     @SerializedName("name")
     val name: String,
     @SerializedName("noticeFile")
-    val noticeFile: NoticeFile,
+    val noticeFile: @RawValue NoticeFile,
     @SerializedName("noticeType")
     val noticeType: String,
     @SerializedName("society")
-    val society: Society,
+    val society: @RawValue Society,
     @SerializedName("studentId")
     val studentId: String,
     @SerializedName("updatedAt")
     val updatedAt: String
-)
+) : Parcelable
 
+@Parcelize
 data class Link(
     @SerializedName("_id")
     val id: String,
@@ -46,8 +51,9 @@ data class Link(
     val linkName: String,
     @SerializedName("url")
     val url: String
-)
+) : Parcelable
 
+@Parcelize
 data class Image(
     @SerializedName("image_name")
     val imageName: String,
@@ -55,4 +61,4 @@ data class Image(
     val imageUrl: String,
     @SerializedName("path")
     val path: String
-)
+) : Parcelable

@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_noticesFragment_to_noticesBottomSheetFragment"
             app:destination="@id/noticesBottomSheetFragment" />
+        <action
+            android:id="@+id/action_noticesFragment_to_noticeDetailActivity"
+            app:destination="@id/noticeDetailActivity" />
     </fragment>
     <fragment
         android:id="@+id/resultsFragment"
@@ -39,4 +42,13 @@
             app:popUpTo="@id/noticesFragment"
             app:popUpToInclusive="true" />
     </dialog>
+    <activity
+        android:id="@+id/noticeDetailActivity"
+        android:name="com.nishant4820.studentapp.ui.noticeDetail.NoticeDetailActivity"
+        android:label="@string/notice_detail"
+        tools:layout="@layout/activity_notice_detail" >
+        <argument
+            android:name="notice"
+            app:argType="com.nishant4820.studentapp.data.models.NoticeData" />
+    </activity>
 </navigation>

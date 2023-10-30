@@ -5,6 +5,7 @@ import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -15,18 +16,19 @@ import com.nishant4820.studentapp.data.models.NoticeResponse
 import com.nishant4820.studentapp.databinding.ItemNoticeBinding
 import com.nishant4820.studentapp.utils.Constants.LOG_TAG
 import com.nishant4820.studentapp.utils.MyDiffUtil
+import com.nishant4820.studentapp.utils.OnListItemClickListener
 import com.nishant4820.studentapp.utils.loadPdf
 
-class NoticesAdapter : RecyclerView.Adapter<NoticesAdapter.ViewHolder>() {
+class NoticesAdapter(private val onListItemClickListener: OnListItemClickListener) : RecyclerView.Adapter<NoticesAdapter.ViewHolder>() {
 
     private var notices = emptyList<NoticeData>()
 
-    class ViewHolder(private val binding: ItemNoticeBinding) :
+    inner class ViewHolder(private val binding: ItemNoticeBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(notice: NoticeData) {
+        fun bind(notice: NoticeData, position: Int) {
             binding.tvTitle.text = notice.name
-            binding.tvDescription.text = notice.description
+            binding.tvDescription.text = HtmlCompat.fromHtml(notice.description, HtmlCompat.FROM_HTML_MODE_COMPACT)
             Log.d(LOG_TAG, "NoticesAdapter: bind, fileUrl: ${notice.noticeFile.fileUrl}")
             if (notice.noticeType == "img") {
                 binding.ivBanner.load(notice.noticeFile.fileUrl) {
@@ -39,8 +41,7 @@ class NoticesAdapter : RecyclerView.Adapter<NoticesAdapter.ViewHolder>() {
                 loadPdf(binding.ivBanner, notice.noticeFile.fileUrl)
             }
             binding.noticeCardView.setOnClickListener {
-                val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(notice.noticeFile.fileUrl))
-                it.context.startActivity(browserIntent)
+                onListItemClickListener.onItemClick(notice, null, null, position)
             }
         }
 
@@ -60,7 +61,7 @@ class NoticesAdapter : RecyclerView.Adapter<NoticesAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentNotice = notices[position]
-        holder.bind(currentNotice)
+        holder.bind(currentNotice, position)
     }
 
     fun setData(newData: NoticeResponse) {
