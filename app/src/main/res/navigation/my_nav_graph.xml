@@ -41,6 +41,10 @@
             app:destination="@id/noticesFragment"
             app:popUpTo="@id/noticesFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_noticesBottomSheetFragment_to_uploadNoticeActivity"
+            app:destination="@id/uploadNoticeActivity"
+            app:popUpTo="@id/noticesFragment" />
     </dialog>
     <activity
         android:id="@+id/noticeDetailActivity"
@@ -51,4 +55,8 @@
             android:name="notice"
             app:argType="com.nishant4820.studentapp.data.models.NoticeData" />
     </activity>
+    <activity
+        android:id="@+id/uploadNoticeActivity"
+        android:name="com.nishant4820.studentapp.ui.uploadNotice.UploadNoticeActivity"
+        android:label="UploadNoticeActivity" />
 </navigation>

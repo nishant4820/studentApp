@@ -19,16 +19,20 @@ data class NoticeResponse(
 
 @Parcelize
 data class NoticeData(
+    @SerializedName("status")
+    val status: Int? = null,
+    @SerializedName("message")
+    val message: String? = null,
     @SerializedName("createdAt")
-    val createdAt: String,
+    val createdAt: String? = null,
     @SerializedName("date")
-    val date: String,
+    val date: String? = null,
     @SerializedName("description")
     val description: String,
     @SerializedName("_id")
-    val id: String,
+    val id: String? = null,
     @SerializedName("Links")
-    val links: @RawValue List<Link>,
+    val links: @RawValue List<Link>? = null,
     @SerializedName("name")
     val name: String,
     @SerializedName("noticeFile")
@@ -36,11 +40,11 @@ data class NoticeData(
     @SerializedName("noticeType")
     val noticeType: String,
     @SerializedName("society")
-    val society: @RawValue Society,
+    val society: @RawValue Society? = null,
     @SerializedName("studentId")
-    val studentId: String,
+    val studentId: String? = null,
     @SerializedName("updatedAt")
-    val updatedAt: String
+    val updatedAt: String? = null
 ) : Parcelable
 
 @Parcelize
@@ -62,3 +66,9 @@ data class Image(
     @SerializedName("path")
     val path: String
 ) : Parcelable
+
+data class NoticeFormState(
+    val enrollmentError: Int? = null,
+    val passwordError: Int? = null,
+    val isDataValid: Boolean = false
+)

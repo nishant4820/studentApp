@@ -38,6 +38,9 @@
             android:exported="false"
             android:label="@string/notice_detail" />
         <activity
+            android:name=".ui.uploadNotice.UploadNoticeActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="false" />
     </application>

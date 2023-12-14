@@ -4,6 +4,7 @@ object Constants {
 
 //    const val BASE_URL = "https://gateway-gazh.onrender.com/"
     const val BASE_URL = "http://192.168.0.169:3000/"
+//    const val BASE_URL = "https://api.bpitindia.ac.in/"
 
     const val ARG_PARAM1 = "param1"
     const val ARG_PARAM2 = "param2"
@@ -46,4 +47,8 @@ object Constants {
     const val NETWORK_RESULT_MESSAGE_TIMEOUT = "Request timed out"
     const val NETWORK_RESULT_MESSAGE_LOADING = "Loading"
     const val NETWORK_RESULT_MESSAGE_NO_RESULTS = "No results found"
+
+    // General Messages
+    const val MESSAGE_NOTICE_UPLOADED = "Notice Uploaded Successfully"
+    const val MESSAGE_FILE_UPLOADED = "File Uploaded Sucessfully"
 }

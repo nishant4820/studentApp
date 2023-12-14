@@ -94,6 +94,10 @@ class NoticesBottomSheetFragment : BottomSheetDialogFragment() {
             findNavController().navigate(R.id.action_noticesBottomSheetFragment_to_noticesFragment)
         }
 
+        binding.uploadBtn.setOnClickListener {
+            findNavController().navigate(R.id.action_noticesBottomSheetFragment_to_uploadNoticeActivity)
+        }
+
         return binding.root
     }
 

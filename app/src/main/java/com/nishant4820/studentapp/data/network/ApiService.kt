@@ -2,6 +2,7 @@ package com.nishant4820.studentapp.data.network
 
 import com.nishant4820.studentapp.data.models.LoginRequestBody
 import com.nishant4820.studentapp.data.models.LoginResponse
+import com.nishant4820.studentapp.data.models.NoticeData
 import com.nishant4820.studentapp.data.models.NoticeResponse
 import com.nishant4820.studentapp.data.models.SettingsResponse
 import retrofit2.Response
@@ -16,9 +17,13 @@ interface ApiService {
     @POST("eventservice/student/login")
     suspend fun login(@Body loginRequestBody: LoginRequestBody): Response<LoginResponse>
 
+    @GET("eventservice/student/settings")
+    suspend fun getSettings(@Header("Authorization") token: String): Response<SettingsResponse>
+
     @GET("eventservice/notice/getall")
     suspend fun getAllNotices(@QueryMap queries: Map<String, String>): Response<NoticeResponse>
 
-    @GET("eventservice/student/settings")
-    suspend fun getSettings(@Header("Authorization") token: String): Response<SettingsResponse>
+    @POST("eventservice/notice/create")
+    suspend fun postNotice(@Header("Authorization") token: String, @Body noticeRequestBody: NoticeData): Response<NoticeData>
+
 }

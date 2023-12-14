@@ -4,6 +4,7 @@ import androidx.room.TypeConverter
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.nishant4820.studentapp.data.models.LoginResponse
+import com.nishant4820.studentapp.data.models.NoticeData
 import com.nishant4820.studentapp.data.models.NoticeResponse
 import com.nishant4820.studentapp.data.models.SettingsResponse
 
@@ -52,6 +53,15 @@ class MyTypeConverter {
 
         fun stringToLoginResponse(data: String): LoginResponse {
             val listType = object : TypeToken<LoginResponse>() {}.type
+            return gson.fromJson(data, listType)
+        }
+
+//        fun noticeDataToString(noticeData: NoticeData): String {
+//            return gson.toJson(noticeData)
+//        }
+
+        fun stringToNoticeData(data: String): NoticeData {
+            val listType = object : TypeToken<NoticeData>() {}.type
             return gson.fromJson(data, listType)
         }
     }

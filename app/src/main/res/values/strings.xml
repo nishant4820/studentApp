@@ -38,6 +38,15 @@
     <string name="iosd">IOSD</string>
     <string name="gdsc">GDSC</string>
     <string name="posted_by">Posted by me</string>
+    <string name="upload_notice">Upload Notice</string>
+
+    <!-- Upload Notice Strings -->
+    <string name="upload">Upload</string>
+    <string name="uploading">Uploading</string>
+    <string name="uploaded">Uploaded</string>
+    <string name="choose_file">Choose File</string>
+    <string name="notice_title">Notice Title</string>
+    <string name="description">Description</string>
 
     <!-- Others -->
 

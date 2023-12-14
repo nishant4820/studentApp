@@ -1,7 +1,5 @@
 package com.nishant4820.studentapp.adapters
 
-import android.content.Intent
-import android.net.Uri
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -19,7 +17,8 @@ import com.nishant4820.studentapp.utils.MyDiffUtil
 import com.nishant4820.studentapp.utils.OnListItemClickListener
 import com.nishant4820.studentapp.utils.loadPdf
 
-class NoticesAdapter(private val onListItemClickListener: OnListItemClickListener) : RecyclerView.Adapter<NoticesAdapter.ViewHolder>() {
+class NoticesAdapter(private val onListItemClickListener: OnListItemClickListener) :
+    RecyclerView.Adapter<NoticesAdapter.ViewHolder>() {
 
     private var notices = emptyList<NoticeData>()
 
@@ -28,7 +27,8 @@ class NoticesAdapter(private val onListItemClickListener: OnListItemClickListene
 
         fun bind(notice: NoticeData, position: Int) {
             binding.tvTitle.text = notice.name
-            binding.tvDescription.text = HtmlCompat.fromHtml(notice.description, HtmlCompat.FROM_HTML_MODE_COMPACT)
+            binding.tvDescription.text =
+                HtmlCompat.fromHtml(notice.description, HtmlCompat.FROM_HTML_MODE_COMPACT)
             Log.d(LOG_TAG, "NoticesAdapter: bind, fileUrl: ${notice.noticeFile.fileUrl}")
             if (notice.noticeType == "img") {
                 binding.ivBanner.load(notice.noticeFile.fileUrl) {

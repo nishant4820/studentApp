@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "682849223210",
+    "project_id": "minorprojectbpit",
+    "storage_bucket": "minorprojectbpit.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:682849223210:android:b68fef8e85cac518ffb953",
+        "android_client_info": {
+          "package_name": "com.nishant4820.studentapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCy0qMowOuuZ60T42rsaFayh4C6RsH0Cvs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

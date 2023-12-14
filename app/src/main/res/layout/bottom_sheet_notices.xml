@@ -117,7 +117,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/apply_btn"
             style="@style/Widget.Material3.Button.IconButton.Filled"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="24dp"
             android:layout_marginTop="16dp"
@@ -125,8 +125,23 @@
             android:paddingVertical="16dp"
             android:text="@string/apply"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/upload_btn"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ll_posted_by_me" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/upload_btn"
+            style="@style/Widget.Material3.Button.IconButton.Filled"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="24dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="24dp"
+            android:paddingVertical="16dp"
+            android:text="@string/upload_notice"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/apply_btn"
             app:layout_constraintTop_toBottomOf="@+id/ll_posted_by_me" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
