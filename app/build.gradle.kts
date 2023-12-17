@@ -59,8 +59,8 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
     // Navigation Components
-    implementation("androidx.navigation:navigation-fragment-ktx:2.7.5")
-    implementation("androidx.navigation:navigation-ui-ktx:2.7.5")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.6")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.6")
 
     // Dagger Hilt
     implementation("com.google.dagger:hilt-android:2.48.1")
@@ -112,6 +112,8 @@ dependencies {
     // Auto Dispose Coroutine Scope
     implementation("com.github.satoshun.coroutine.autodispose:autodispose:0.3.1")
 
+    // Charts Library
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }
 
 kapt {

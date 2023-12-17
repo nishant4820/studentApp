@@ -89,8 +89,8 @@ class NoticesViewModel @Inject constructor(
             queries[QUERY_STUDENT_ID] = studentId
         }
 
-        queries[QUERY_OFFSET] = DEFAULT_OFFSET
-        queries[QUERY_LIMIT] = DEFAULT_LIMIT
+//        queries[QUERY_OFFSET] = DEFAULT_OFFSET
+//        queries[QUERY_LIMIT] = DEFAULT_LIMIT
 
         return queries
     }

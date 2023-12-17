@@ -60,6 +60,14 @@ fun loadPdf(imageView: ImageView, pdfUrl: String) {
     }
 }
 
+fun convertPxToDp(context: Context, px: Float): Float {
+    return px / context.resources.displayMetrics.density
+}
+
+fun convertDpToPx(context: Context, dp: Float): Float {
+    return dp * context.resources.displayMetrics.density
+}
+
 /**
  * Extension function to simplify setting an afterTextChanged action to EditText components.
  */

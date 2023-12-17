@@ -29,7 +29,6 @@ class NoticesAdapter(private val onListItemClickListener: OnListItemClickListene
             binding.tvTitle.text = notice.name
             binding.tvDescription.text =
                 HtmlCompat.fromHtml(notice.description, HtmlCompat.FROM_HTML_MODE_COMPACT)
-            Log.d(LOG_TAG, "NoticesAdapter: bind, fileUrl: ${notice.noticeFile.fileUrl}")
             if (notice.noticeType == "img") {
                 binding.ivBanner.load(notice.noticeFile.fileUrl) {
                     crossfade(true)

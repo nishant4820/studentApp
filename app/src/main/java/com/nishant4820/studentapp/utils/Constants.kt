@@ -2,25 +2,26 @@ package com.nishant4820.studentapp.utils
 
 object Constants {
 
-//    const val BASE_URL = "https://gateway-gazh.onrender.com/"
-    const val BASE_URL = "http://192.168.0.169:3000/"
-//    const val BASE_URL = "https://api.bpitindia.ac.in/"
+    const val BASE_URL = "http://api.bpitindia.ac.in/"
 
     const val ARG_PARAM1 = "param1"
     const val ARG_PARAM2 = "param2"
     const val LOG_TAG = "StudentLogTag"
 
     // API Queries
-    const val ENROLLMENT_NUMBER = "enrollment"
+    const val ENROLLMENT_NUMBER = "enrollment_number"
     const val QUERY_SOCIETY = "society"
     const val QUERY_STUDENT_ID = "studentId"
     const val QUERY_OFFSET = "offset"
     const val QUERY_LIMIT = "limit"
+    const val FORMAT = "format"
+    const val JSON = "json"
 
     // ROOM DATABASE
     const val DATABASE_NAME = "my_database"
     const val NOTICES_TABLE = "notices_table"
     const val SETTINGS_TABLE = "settings_table"
+    const val RESULTS_TABLE = "results_table"
 
     // Bottom Sheet and Preferences
     const val DEFAULT_OFFSET = "0"
@@ -50,5 +51,5 @@ object Constants {
 
     // General Messages
     const val MESSAGE_NOTICE_UPLOADED = "Notice Uploaded Successfully"
-    const val MESSAGE_FILE_UPLOADED = "File Uploaded Sucessfully"
+    const val MESSAGE_FILE_UPLOADED = "File Uploaded Successfully"
 }

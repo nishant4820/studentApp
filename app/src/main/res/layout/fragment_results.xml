@@ -1,14 +1,534 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".ui.home.fragments.resultsFragment.ResultsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Fragment Result" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="16dp"
+                android:paddingTop="16dp"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cv_student_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="20dp"
+                            android:text="@string/student_details"
+                            android:textSize="@dimen/font_20sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="4dp"
+                            android:orientation="horizontal"
+                            android:paddingVertical="2dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:text="@string/enrollment_number" />
+
+                            <TextView
+                                android:id="@+id/tv_enrollment"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3"
+                                tools:text="08820802720" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="4dp"
+                            android:orientation="horizontal"
+                            android:paddingVertical="2dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:text="@string/name" />
+
+                            <TextView
+                                android:id="@+id/tv_name"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3"
+                                tools:text="NISHANT JAIN" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="4dp"
+                            android:orientation="horizontal"
+                            android:paddingVertical="2dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:text="@string/batch" />
+
+                            <TextView
+                                android:id="@+id/tv_batch"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3"
+                                tools:text="2021" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="4dp"
+                            android:orientation="horizontal"
+                            android:paddingVertical="2dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:text="@string/institute" />
+
+                            <TextView
+                                android:id="@+id/tv_college"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3"
+                                tools:text="BHAGWAN PARSHURAM INSTITUTE OF TECHNOLOGY" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="4dp"
+                            android:orientation="horizontal"
+                            android:paddingVertical="2dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2"
+                                android:text="@string/course" />
+
+                            <TextView
+                                android:id="@+id/tv_branch"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3"
+                                tools:text="BACHELOR OF TECHNOLOGY (COMPUTER SCIENCE AND ENGINEERING)" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_semester"
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="8dp"
+                    app:boxBackgroundColor="#FFFFFBFE"
+                    app:boxCornerRadiusBottomEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusTopStart="12dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cv_student_detail"
+                    app:startIconDrawable="@drawable/ic_results">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/tv_semester"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:hint="@string/semester"
+                        android:inputType="none"
+                        android:text="@string/overall" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cv_result_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/til_semester">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_result_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="20dp"
+                            android:textSize="@dimen/font_20sp"
+                            tools:text="Overall Result" />
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="4dp"
+                            android:orientation="horizontal"
+                            android:paddingVertical="2dp">
+
+                            <TextView
+                                android:id="@+id/tv_gpa_title"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/cgpa" />
+
+                            <TextView
+                                android:id="@+id/tv_gpa"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                tools:text="8.45" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="4dp"
+                            android:orientation="horizontal"
+                            android:paddingVertical="2dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/percentage" />
+
+                            <TextView
+                                android:id="@+id/tv_percentage"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                tools:text="90.4%" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="4dp"
+                            android:orientation="horizontal"
+                            android:paddingVertical="2dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/credits_obtained" />
+
+                            <TextView
+                                android:id="@+id/tv_credits"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                tools:text="27" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="4dp"
+                            android:orientation="horizontal"
+                            android:paddingVertical="2dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/marks_scored" />
+
+                            <TextView
+                                android:id="@+id/tv_marks"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                tools:text="1323/1500" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cv_visualization"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cv_result_detail">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="20dp"
+                            android:text="@string/visualization"
+                            android:textSize="@dimen/font_20sp" />
+
+                        <com.github.mikephil.charting.charts.LineChart
+                            android:id="@+id/chart_overall"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="200dp"
+                            tools:visibility="gone" />
+
+                        <com.github.mikephil.charting.charts.LineChart
+                            android:id="@+id/chart_overall_percentage"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="200dp"
+                            tools:visibility="gone" />
+
+                        <com.github.mikephil.charting.charts.HorizontalBarChart
+                            android:id="@+id/chart"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:minHeight="300dp" />
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <!--                <com.google.android.material.card.MaterialCardView-->
+                <!--                    android:id="@+id/cv_visualization_semester"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginTop="16dp"-->
+                <!--                    app:layout_constraintEnd_toEndOf="parent"-->
+                <!--                    app:layout_constraintStart_toStartOf="parent"-->
+                <!--                    app:layout_constraintTop_toBottomOf="@id/cv_visualization_overall">-->
+
+                <!--                    <LinearLayout-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="wrap_content"-->
+                <!--                        android:layout_margin="16dp"-->
+                <!--                        android:orientation="vertical">-->
+
+                <!--                        <TextView-->
+                <!--                            android:layout_width="wrap_content"-->
+                <!--                            android:layout_height="wrap_content"-->
+                <!--                            android:layout_marginBottom="20dp"-->
+                <!--                            android:text="@string/visualization"-->
+                <!--                            android:textSize="@dimen/font_20sp" />-->
+
+                <!--                        <com.github.mikephil.charting.charts.HorizontalBarChart-->
+                <!--                            android:id="@+id/chart"-->
+                <!--                            android:layout_width="match_parent"-->
+                <!--                            android:layout_height="wrap_content"-->
+                <!--                            android:minHeight="300dp" />-->
+
+                <!--                    </LinearLayout>-->
+
+                <!--                </com.google.android.material.card.MaterialCardView>-->
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cv_marks_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cv_visualization">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="16dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="20dp"
+                            android:text="@string/result_breakdown"
+                            android:textSize="@dimen/font_20sp" />
+
+                        <LinearLayout
+                            android:id="@+id/ll_header_overall"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="4dp"
+                            android:background="#444444"
+                            android:orientation="horizontal"
+                            android:paddingVertical="4dp"
+                            tools:visibility="gone">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/semester"
+                                android:textColor="@color/white"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/marks"
+                                android:textAlignment="center"
+                                android:textColor="@color/white"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/percentage"
+                                android:textAlignment="center"
+                                android:textColor="@color/white"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/sgpa"
+                                android:textAlignment="center"
+                                android:textColor="@color/white"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/ll_header_semester"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="4dp"
+                            android:background="#444444"
+                            android:orientation="horizontal"
+                            android:paddingVertical="4dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="3"
+                                android:text="@string/subjects_credits"
+                                android:textColor="@color/white"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/int_ext"
+                                android:textAlignment="center"
+                                android:textColor="@color/white"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/marks"
+                                android:textAlignment="center"
+                                android:textColor="@color/white"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/ll_subjects_container"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <include
+                                layout="@layout/result_breakdown_item_layout"
+                                android:visibility="gone"
+                                tools:visibility="visible" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_no_internet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_horizontal"
+            android:contentDescription="@string/error_image"
+            android:src="@drawable/ic_sad" />
+
+        <TextView
+            android:id="@+id/tv_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/some_error_occurred"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

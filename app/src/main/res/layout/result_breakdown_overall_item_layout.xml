@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="4dp"
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:paddingVertical="4dp">
+
+    <TextView
+        android:id="@+id/tv_semester"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        tools:text="Semester 1" />
+
+    <TextView
+        android:id="@+id/tv_marks"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textAlignment="center"
+        tools:text="1173 / 1300" />
+
+    <TextView
+        android:id="@+id/tv_percentage"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textAlignment="center"
+        tools:text="90.231 %" />
+
+    <TextView
+        android:id="@+id/tv_cgpa"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textAlignment="center"
+        tools:text="9.556" />
+</LinearLayout>

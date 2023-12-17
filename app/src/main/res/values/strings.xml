@@ -48,6 +48,37 @@
     <string name="notice_title">Notice Title</string>
     <string name="description">Description</string>
 
+    <!-- Result Fragment Strings -->
+    <string name="student_details">Student Details</string>
+    <string name="enrollment_number">Enrollment No.</string>
+    <string name="name">Name</string>
+    <string name="batch">Batch</string>
+    <string name="institute">Institute</string>
+    <string name="course">Course</string>
+    <string name="semester">Semester</string>
+    <string name="overall">Overall</string>
+    <string name="cgpa">CGPA</string>
+    <string name="sgpa">SGPA</string>
+    <string name="percentage">Percentage</string>
+    <string name="credits_obtained">Credits Obtained</string>
+    <string name="marks_scored">Marks Scored</string>
+    <string name="result_breakdown">Result Breakdown</string>
+    <string name="subjects_credits">Subject (Credits)</string>
+    <string name="int_ext">Int. | Ext.</string>
+    <string name="marks">Marks</string>
+    <string name="visualization">Visualization</string>
+    <string-array name="semester_array">
+        <item>Overall</item>
+        <item>Semester 1</item>
+        <item>Semester 2</item>
+        <item>Semester 3</item>
+        <item>Semester 4</item>
+        <item>Semester 5</item>
+        <item>Semester 6</item>
+        <item>Semester 7</item>
+        <item>Semester 8</item>
+    </string-array>
+
     <!-- Others -->
 
 </resources>

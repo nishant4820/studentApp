@@ -33,4 +33,8 @@ object DatabaseModule {
     @Provides
     fun provideSettingsDao(database: MyDatabase) = database.settingsDao()
 
+    @Singleton
+    @Provides
+    fun provideResultsDao(database: MyDatabase) = database.resultsDao()
+
 }

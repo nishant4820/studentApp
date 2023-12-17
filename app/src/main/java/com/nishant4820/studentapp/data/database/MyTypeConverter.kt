@@ -7,17 +7,18 @@ import com.nishant4820.studentapp.data.models.LoginResponse
 import com.nishant4820.studentapp.data.models.NoticeData
 import com.nishant4820.studentapp.data.models.NoticeResponse
 import com.nishant4820.studentapp.data.models.SettingsResponse
+import com.nishant4820.studentapp.data.models.StudentResultResponse
 
 class MyTypeConverter {
 
 
     @TypeConverter
-    fun foodRecipeToString(foodRecipe: NoticeResponse): String {
+    fun noticesToString(foodRecipe: NoticeResponse): String {
         return gson.toJson(foodRecipe)
     }
 
     @TypeConverter
-    fun stringToFoodRecipe(data: String): NoticeResponse {
+    fun stringToNotices(data: String): NoticeResponse {
         val listType = object : TypeToken<NoticeResponse>() {}.type
         return gson.fromJson(data, listType)
     }
@@ -41,6 +42,17 @@ class MyTypeConverter {
     @TypeConverter
     fun stringToSettings(data: String): SettingsResponse {
         val listType = object : TypeToken<SettingsResponse>() {}.type
+        return gson.fromJson(data, listType)
+    }
+
+    @TypeConverter
+    fun resultsToString(results: StudentResultResponse): String {
+        return gson.toJson(results)
+    }
+
+    @TypeConverter
+    fun stringToResults(data: String): StudentResultResponse {
+        val listType = object : TypeToken<StudentResultResponse>() {}.type
         return gson.fromJson(data, listType)
     }
 

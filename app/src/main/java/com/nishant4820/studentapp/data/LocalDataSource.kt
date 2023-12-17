@@ -2,6 +2,8 @@ package com.nishant4820.studentapp.data
 
 import com.nishant4820.studentapp.data.database.notices.NoticesDao
 import com.nishant4820.studentapp.data.database.notices.NoticesEntity
+import com.nishant4820.studentapp.data.database.results.ResultsDao
+import com.nishant4820.studentapp.data.database.results.ResultsEntity
 import com.nishant4820.studentapp.data.database.settings.SettingsDao
 import com.nishant4820.studentapp.data.database.settings.SettingsEntity
 import kotlinx.coroutines.flow.Flow
@@ -9,7 +11,8 @@ import javax.inject.Inject
 
 class LocalDataSource @Inject constructor(
     private val noticesDao: NoticesDao,
-    private val settingsDao: SettingsDao
+    private val settingsDao: SettingsDao,
+    private val resultsDao: ResultsDao
 ) {
 
     fun readNotices(): Flow<List<NoticesEntity>> {
@@ -26,5 +29,13 @@ class LocalDataSource @Inject constructor(
 
     suspend fun insertSettings(settingsEntity: SettingsEntity) {
         settingsDao.insertSettings(settingsEntity)
+    }
+
+    fun readResults(): Flow<List<ResultsEntity>> {
+        return resultsDao.readResults()
+    }
+
+    suspend fun insertResults(resultsEntity: ResultsEntity) {
+        resultsDao.insertResults(resultsEntity)
     }
 }
