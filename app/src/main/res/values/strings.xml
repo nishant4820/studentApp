@@ -79,6 +79,15 @@
         <item>Semester 8</item>
     </string-array>
 
+    <!-- Profile Fragment Strings -->
+    <string name="welcome">Welcome,</string>
+    <string name="branch_section">Branch &amp; Section</string>
+    <string name="phone">Phone</string>
+    <string name="address">Address</string>
+    <string name="bpit">BHAGWAN PARSHURAM INSTITUTE OF TECHNOLOGY</string>
+    <string name="logout">Log out</string>
+    <string name="developers">Made with ❤️ by BPITians</string>
+
     <!-- Others -->
 
 </resources>

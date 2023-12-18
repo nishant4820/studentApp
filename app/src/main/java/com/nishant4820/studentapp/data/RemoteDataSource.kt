@@ -5,6 +5,7 @@ import com.nishant4820.studentapp.data.models.LoginResponse
 import com.nishant4820.studentapp.data.models.NoticeData
 import com.nishant4820.studentapp.data.models.NoticeResponse
 import com.nishant4820.studentapp.data.models.SettingsResponse
+import com.nishant4820.studentapp.data.models.StudentProfileResponse
 import com.nishant4820.studentapp.data.models.StudentResultResponse
 import com.nishant4820.studentapp.data.network.ApiService
 import retrofit2.Response
@@ -24,6 +25,10 @@ class RemoteDataSource @Inject constructor(
 
     suspend fun getAllNotices(queries: HashMap<String, String>): Response<NoticeResponse> {
         return apiService.getAllNotices(queries)
+    }
+
+    suspend fun getStudentProfile(token: String): Response<StudentProfileResponse> {
+        return apiService.getStudentProfile(token)
     }
 
     suspend fun postNotice(token: String, noticeRequestBody: NoticeData): Response<NoticeData> {

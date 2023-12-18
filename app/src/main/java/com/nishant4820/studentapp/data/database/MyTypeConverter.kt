@@ -7,6 +7,7 @@ import com.nishant4820.studentapp.data.models.LoginResponse
 import com.nishant4820.studentapp.data.models.NoticeData
 import com.nishant4820.studentapp.data.models.NoticeResponse
 import com.nishant4820.studentapp.data.models.SettingsResponse
+import com.nishant4820.studentapp.data.models.StudentProfileResponse
 import com.nishant4820.studentapp.data.models.StudentResultResponse
 
 class MyTypeConverter {
@@ -53,6 +54,17 @@ class MyTypeConverter {
     @TypeConverter
     fun stringToResults(data: String): StudentResultResponse {
         val listType = object : TypeToken<StudentResultResponse>() {}.type
+        return gson.fromJson(data, listType)
+    }
+
+    @TypeConverter
+    fun profileToString(profile: StudentProfileResponse): String {
+        return gson.toJson(profile)
+    }
+
+    @TypeConverter
+    fun stringToProfile(data: String): StudentProfileResponse {
+        val listType = object : TypeToken<StudentProfileResponse>() {}.type
         return gson.fromJson(data, listType)
     }
 

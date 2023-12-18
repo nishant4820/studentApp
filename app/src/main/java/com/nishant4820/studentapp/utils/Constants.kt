@@ -22,6 +22,7 @@ object Constants {
     const val NOTICES_TABLE = "notices_table"
     const val SETTINGS_TABLE = "settings_table"
     const val RESULTS_TABLE = "results_table"
+    const val PROFILE_TABLE = "profile_table"
 
     // Bottom Sheet and Preferences
     const val DEFAULT_OFFSET = "0"

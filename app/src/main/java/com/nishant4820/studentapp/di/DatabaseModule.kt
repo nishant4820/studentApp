@@ -37,4 +37,8 @@ object DatabaseModule {
     @Provides
     fun provideResultsDao(database: MyDatabase) = database.resultsDao()
 
+    @Singleton
+    @Provides
+    fun provideProfileDao(database: MyDatabase) = database.profileDao()
+
 }

@@ -33,6 +33,12 @@ class DataStoreRepository @Inject constructor(@ApplicationContext private val co
 
     private val dataStore: DataStore<Preferences> = context.dataStore
 
+    suspend fun clearAllPreferences() {
+        dataStore.edit { settings ->
+            settings.clear()
+        }
+    }
+
     suspend fun saveSelectedSociety(
         societyID: String,
         societyChipId: Int
