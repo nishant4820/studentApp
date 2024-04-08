@@ -41,7 +41,6 @@ import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.roundToInt
 
-
 class ResultsFragment : Fragment() {
 
     private val resultsViewModel: ResultsViewModel by viewModels(ownerProducer = { requireActivity() })
@@ -73,19 +72,18 @@ class ResultsFragment : Fragment() {
             }
         }
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             networkListener = NetworkListener(requireContext())
             networkListener.networkAvailability.collect { networkStatus ->
                 Log.d(
                     LOG_TAG,
                     "Notices Fragment: Network Status Observer, network status: $networkStatus"
                 )
-                resultsViewModel.networkStatus = networkStatus
-//                resultsViewModel.showNetworkStatus()
                 if (networkStatus) {
                     requestStudentResult()
                 } else if (isFirstNetworkCallback) {
                     binding.tvError.text = Constants.NETWORK_RESULT_MESSAGE_NO_INTERNET
+                    binding.llNoInternet.visibility = View.VISIBLE
 //                    loadDataFromCache()
                 }
                 isFirstNetworkCallback = false
@@ -97,9 +95,9 @@ class ResultsFragment : Fragment() {
                 LOG_TAG,
                 "Results Fragment: Student Result response observer, response code: ${response.statusCode}"
             )
+            binding.llNoInternet.visibility = View.GONE
             when (response) {
                 is NetworkResult.Success -> {
-                    binding.llNoInternet.visibility = View.GONE
                     binding.swipeRefreshLayout.isRefreshing = false
                     response.data?.let {
                         resultResponse = it
@@ -108,7 +106,6 @@ class ResultsFragment : Fragment() {
                 }
 
                 is NetworkResult.Error -> {
-                    binding.llNoInternet.visibility = View.GONE
                     binding.swipeRefreshLayout.isRefreshing = false
                     binding.tvError.text = response.message.toString()
                     Snackbar.make(
@@ -119,11 +116,9 @@ class ResultsFragment : Fragment() {
                 }
 
                 is NetworkResult.Loading -> {
-                    binding.llNoInternet.visibility = View.GONE
                 }
             }
         }
-
 
         return binding.root
     }

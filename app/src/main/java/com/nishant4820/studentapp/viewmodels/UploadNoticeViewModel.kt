@@ -6,11 +6,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.nishant4820.studentapp.R
 import com.nishant4820.studentapp.data.Repository
 import com.nishant4820.studentapp.data.database.MyTypeConverter
 import com.nishant4820.studentapp.data.models.NoticeData
-import com.nishant4820.studentapp.data.models.NoticeFormState
 import com.nishant4820.studentapp.utils.Constants
 import com.nishant4820.studentapp.utils.Constants.LOG_TAG
 import com.nishant4820.studentapp.utils.Constants.NETWORK_RESULT_MESSAGE_LOADING
@@ -30,9 +28,6 @@ import javax.inject.Inject
 class UploadNoticeViewModel @Inject constructor(private val repository: Repository) :
     ViewModel() {
 
-    private val _noticeForm = MutableLiveData<NoticeFormState>()
-    val noticeFormState: LiveData<NoticeFormState> = _noticeForm
-
     private val _postNoticeResponse = MutableLiveData<NetworkResult<NoticeData>>()
     val postNoticeResponse: LiveData<NetworkResult<NoticeData>> = _postNoticeResponse
 
@@ -51,12 +46,6 @@ class UploadNoticeViewModel @Inject constructor(private val repository: Reposito
             val token = Hawk.get<String>(Constants.PREFERENCES_TOKEN)
             val response = repository.remote.postNotice(token, noticeRequestBody)
             _postNoticeResponse.value = handlePostNoticeResponse(response)
-            if (_postNoticeResponse.value is NetworkResult.Success) {
-                val postNoticeResult = _postNoticeResponse.value!!.data
-                if (postNoticeResult != null) {
-//                    TODO: Cache Response
-                }
-            }
         } catch (e: Exception) {
             Log.d(
                 LOG_TAG,
@@ -102,22 +91,6 @@ class UploadNoticeViewModel @Inject constructor(private val repository: Reposito
                 return NetworkResult.Error(message, response.code())
             }
         }
-    }
-
-    fun noticeFormDataChanged(enrollment: String, password: String) {
-        if (!isInputFieldValid(enrollment)) {
-            _noticeForm.value = NoticeFormState(enrollmentError = R.string.invalid_username)
-        } else if (!isInputFieldValid(password)) {
-            _noticeForm.value = NoticeFormState(passwordError = R.string.invalid_password)
-        } else {
-            _noticeForm.value = NoticeFormState(isDataValid = true)
-        }
-    }
-
-
-    // A placeholder input field validation check
-    private fun isInputFieldValid(value: String): Boolean {
-        return value.length >= 5
     }
 
 }

@@ -52,8 +52,8 @@ class LoginViewModel @Inject constructor(private val repository: Repository) :
         try {
             val response = repository.remote.login(loginRequestBody)
             _loginResponse.value = handleLoginResponse(response)
-            if (_loginResponse.value is NetworkResult.Success) {
-                val loginResult = _loginResponse.value!!.data
+            if (loginResponse.value is NetworkResult.Success) {
+                val loginResult = loginResponse.value!!.data
                 if (loginResult != null) {
                     Hawk.put(PREFERENCES_TOKEN, "Bearer ${loginResult.token}")
                     Hawk.put(PREFERENCES_ID, loginResult.id)

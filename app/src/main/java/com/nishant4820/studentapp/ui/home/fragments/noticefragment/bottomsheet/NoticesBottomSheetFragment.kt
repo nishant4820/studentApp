@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -17,8 +16,11 @@ import com.nishant4820.studentapp.data.models.Society
 import com.nishant4820.studentapp.data.models.SocietyDetails
 import com.nishant4820.studentapp.databinding.BottomSheetNoticesBinding
 import com.nishant4820.studentapp.utils.Constants.LOG_TAG
+import com.nishant4820.studentapp.utils.Constants.PREFERENCES_IS_UPLOADED_BY_ME
+import com.nishant4820.studentapp.utils.Constants.PREFERENCES_SOCIETY
+import com.nishant4820.studentapp.utils.Constants.PREFERENCES_SOCIETY_CHIP_ID
 import com.nishant4820.studentapp.viewmodels.MainViewModel
-import com.nishant4820.studentapp.viewmodels.NoticesViewModel
+import com.orhanobut.hawk.Hawk
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlin.math.abs
@@ -30,7 +32,6 @@ class NoticesBottomSheetFragment : BottomSheetDialogFragment() {
     private var isUploadedByMe: Boolean? = null
     private var societyList: List<Society>? = null
     private var societyAdminDetails: SocietyDetails? = null
-    private val noticesViewModel: NoticesViewModel by viewModels(ownerProducer = { requireActivity() })
     private val mainViewModel: MainViewModel by viewModels(ownerProducer = { requireActivity() })
     private var _binding: BottomSheetNoticesBinding? = null
     private val binding get() = _binding!!
@@ -39,11 +40,11 @@ class NoticesBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = BottomSheetNoticesBinding.inflate(inflater, container, false)
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             mainViewModel.readSettings.observe(viewLifecycleOwner) { database ->
                 if (database.isNotEmpty()) {
                     val settingsResponse = database[0].settings
@@ -80,17 +81,9 @@ class NoticesBottomSheetFragment : BottomSheetDialogFragment() {
         }
 
         binding.applyBtn.setOnClickListener {
-            if (societyId != null && societyChipId != null) {
-                noticesViewModel.saveSelectedSociety(societyId!!, societyChipId!!)
-            } else {
-                noticesViewModel.deleteSelectedSociety()
-            }
-
-            if (isUploadedByMe != null) {
-                noticesViewModel.saveIsUploadedByMe(isUploadedByMe!!)
-            } else {
-                noticesViewModel.deleteIsUploadedByMe()
-            }
+            Hawk.put(PREFERENCES_SOCIETY, societyId)
+            Hawk.put(PREFERENCES_SOCIETY_CHIP_ID, societyChipId)
+            Hawk.put(PREFERENCES_IS_UPLOADED_BY_ME, isUploadedByMe)
             findNavController().navigate(R.id.action_noticesBottomSheetFragment_to_noticesFragment)
         }
 
@@ -123,29 +116,24 @@ class NoticesBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     private fun markSelectedSociety() {
-        noticesViewModel.readSelectedSociety.asLiveData().observe(viewLifecycleOwner) { society ->
-            this.societyId = society.societyId
-            this.societyChipId = society.societyChipId
-            if (this.societyChipId != null) {
-                try {
-                    binding.societyChipGroup.findViewById<Chip>(societyChipId!!).isChecked = true
-                } catch (_: Exception) {
-                }
+        this.societyId = Hawk.get(PREFERENCES_SOCIETY)
+        this.societyChipId = Hawk.get(PREFERENCES_SOCIETY_CHIP_ID)
+        if (this.societyChipId != null) {
+            try {
+                binding.societyChipGroup.findViewById<Chip>(societyChipId!!).isChecked = true
+            } catch (_: Exception) {
             }
         }
     }
 
     private fun markIsUploadedByMe() {
-        noticesViewModel.readIsUploadedByMe.asLiveData()
-            .observe(viewLifecycleOwner) { isUploadedByMe ->
-                this.isUploadedByMe = isUploadedByMe
-                if (this.isUploadedByMe != null) {
-                    try {
-                        binding.uploadedByMeSwitch.isChecked = isUploadedByMe!!
-                    } catch (_: Exception) {
-                    }
-                }
+        this.isUploadedByMe = Hawk.get(PREFERENCES_IS_UPLOADED_BY_ME)
+        if (this.isUploadedByMe != null) {
+            try {
+                binding.uploadedByMeSwitch.isChecked = isUploadedByMe!!
+            } catch (_: Exception) {
             }
+        }
     }
 
     override fun onDestroyView() {

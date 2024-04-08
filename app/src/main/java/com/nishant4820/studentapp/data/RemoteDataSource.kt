@@ -1,5 +1,6 @@
 package com.nishant4820.studentapp.data
 
+import com.nishant4820.studentapp.data.models.AttendanceResponse
 import com.nishant4820.studentapp.data.models.LoginRequestBody
 import com.nishant4820.studentapp.data.models.LoginResponse
 import com.nishant4820.studentapp.data.models.NoticeData
@@ -37,6 +38,10 @@ class RemoteDataSource @Inject constructor(
 
     suspend fun getStudentResult(queries: HashMap<String, String>): Response<StudentResultResponse> {
         return apiService.getStudentResult(queries)
+    }
+
+    suspend fun getStudentAttendance(queries: HashMap<String, String>): Response<AttendanceResponse> {
+        return apiService.getStudentAttendance(queries)
     }
 
 }

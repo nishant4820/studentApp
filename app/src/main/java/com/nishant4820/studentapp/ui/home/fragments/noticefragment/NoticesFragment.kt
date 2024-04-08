@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,7 +25,6 @@ import com.nishant4820.studentapp.utils.NetworkListener
 import com.nishant4820.studentapp.utils.NetworkResult
 import com.nishant4820.studentapp.utils.NetworkUtils
 import com.nishant4820.studentapp.utils.OnListItemClickListener
-import com.nishant4820.studentapp.viewmodels.MainViewModel
 import com.nishant4820.studentapp.viewmodels.NoticesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -34,7 +32,6 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class NoticesFragment : Fragment(), OnListItemClickListener {
     private val mAdapter by lazy { NoticesAdapter(this) }
-    private val mainViewModel: MainViewModel by viewModels(ownerProducer = { requireActivity() })
     private val noticesViewModel: NoticesViewModel by viewModels(ownerProducer = { requireActivity() })
     private var isFirstNetworkCallback = true
     private lateinit var networkListener: NetworkListener
@@ -66,7 +63,11 @@ class NoticesFragment : Fragment(), OnListItemClickListener {
             if (noticesViewModel.networkStatus) {
                 findNavController().navigate(R.id.action_noticesFragment_to_noticesBottomSheetFragment)
             } else {
-                noticesViewModel.showNetworkStatus()
+                Snackbar.make(
+                    binding.root,
+                    NETWORK_RESULT_MESSAGE_NO_INTERNET,
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
         }
 
@@ -78,11 +79,7 @@ class NoticesFragment : Fragment(), OnListItemClickListener {
             }
         })
 
-        noticesViewModel.readBackOnline.asLiveData().observe(viewLifecycleOwner) {
-            noticesViewModel.backOnline = it
-        }
-
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             networkListener = NetworkListener(requireContext())
             networkListener.networkAvailability.collect { networkStatus ->
                 Log.d(
@@ -90,7 +87,6 @@ class NoticesFragment : Fragment(), OnListItemClickListener {
                     "Notices Fragment: Network Status Observer, network status: $networkStatus"
                 )
                 noticesViewModel.networkStatus = networkStatus
-                noticesViewModel.showNetworkStatus()
                 if (networkStatus) {
                     requestNotices()
                 } else if (isFirstNetworkCallback) {
@@ -101,14 +97,14 @@ class NoticesFragment : Fragment(), OnListItemClickListener {
             }
         }
 
-        mainViewModel.noticesResponse.observe(viewLifecycleOwner) { response ->
+        noticesViewModel.noticesResponse.observe(viewLifecycleOwner) { response ->
             Log.d(
                 LOG_TAG,
                 "Notices Fragment: Notices response observer, response code: ${response.statusCode}"
             )
+            binding.llNoInternet.visibility = View.GONE
             when (response) {
                 is NetworkResult.Success -> {
-                    binding.llNoInternet.visibility = View.GONE
                     binding.swipeRefreshLayout.isRefreshing = false
                     response.data?.let { mAdapter.setData(it) }
                     hideShimmerEffect()
@@ -127,7 +123,6 @@ class NoticesFragment : Fragment(), OnListItemClickListener {
                 }
 
                 is NetworkResult.Error -> {
-                    binding.llNoInternet.visibility = View.GONE
                     binding.swipeRefreshLayout.isRefreshing = false
                     binding.tvError.text = response.message.toString()
                     loadDataFromCache()
@@ -142,7 +137,6 @@ class NoticesFragment : Fragment(), OnListItemClickListener {
                 is NetworkResult.Loading -> {
                     Log.d(LOG_TAG, "Notices Fragment: shimmer effect from is loading state")
                     showShimmerEffect()
-                    binding.llNoInternet.visibility = View.GONE
                 }
             }
         }
@@ -160,12 +154,12 @@ class NoticesFragment : Fragment(), OnListItemClickListener {
     private fun requestNotices() {
         Log.d(LOG_TAG, "Notices Fragment: requestNotices")
         showShimmerEffect()
-        mainViewModel.getAllNotices(noticesViewModel.applyQueries())
+        noticesViewModel.getAllNotices(noticesViewModel.applyQueries())
     }
 
     private fun loadDataFromCache() {
-        lifecycleScope.launch {
-            mainViewModel.readNotices.observe(viewLifecycleOwner) { database ->
+        viewLifecycleOwner.lifecycleScope.launch {
+            noticesViewModel.readNotices.observe(viewLifecycleOwner) { database ->
                 if (database.isNotEmpty()) {
                     mAdapter.setData(database[0].notices)
                 } else {
@@ -199,7 +193,10 @@ class NoticesFragment : Fragment(), OnListItemClickListener {
                 )
                 findNavController().navigate(action)
             } catch (e: Exception) {
-                Log.d(LOG_TAG, "NoticesFragment: onItemClick, exception in navigating to Notice Detail Activity, exception message: ${e.message}")
+                Log.d(
+                    LOG_TAG,
+                    "NoticesFragment: onItemClick, exception in navigating to Notice Detail Activity, exception message: ${e.message}"
+                )
             }
         }
     }

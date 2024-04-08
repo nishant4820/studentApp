@@ -47,7 +47,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="20dp"
                             android:text="@string/student_details"
-                            android:textSize="@dimen/font_20sp" />
+                            android:textSize="20sp" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -165,7 +165,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="8dp"
-                    app:boxBackgroundColor="#FFFFFBFE"
+                    app:boxBackgroundColor="@color/colorPrimary"
                     app:boxCornerRadiusBottomEnd="12dp"
                     app:boxCornerRadiusBottomStart="12dp"
                     app:boxCornerRadiusTopEnd="12dp"
@@ -205,7 +205,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="20dp"
-                            android:textSize="@dimen/font_20sp"
+                            android:textSize="20sp"
                             tools:text="Overall Result" />
 
 
@@ -318,7 +318,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="20dp"
                             android:text="@string/visualization"
-                            android:textSize="@dimen/font_20sp" />
+                            android:textSize="20sp" />
 
                         <com.github.mikephil.charting.charts.LineChart
                             android:id="@+id/chart_overall"
@@ -366,7 +366,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="20dp"
                             android:text="@string/result_breakdown"
-                            android:textSize="@dimen/font_20sp" />
+                            android:textSize="20sp" />
 
                         <LinearLayout
                             android:id="@+id/ll_header_overall"

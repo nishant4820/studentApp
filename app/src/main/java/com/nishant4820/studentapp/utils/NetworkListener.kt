@@ -10,10 +10,10 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class NetworkListener(context: Context) : ConnectivityManager.NetworkCallback() {
 
-    private val _networkAvailability: MutableStateFlow<Boolean>
+    private val _networkAvailability: MutableStateFlow<Boolean> = MutableStateFlow(false)
 
     init {
-        _networkAvailability = MutableStateFlow(isNetworkAvailable(context, this))
+        _networkAvailability.value = isNetworkAvailable(context, this)
     }
 
     val networkAvailability: StateFlow<Boolean>

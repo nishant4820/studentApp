@@ -1,6 +1,5 @@
 package com.nishant4820.studentapp.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.text.HtmlCompat
@@ -12,7 +11,6 @@ import com.nishant4820.studentapp.R
 import com.nishant4820.studentapp.data.models.NoticeData
 import com.nishant4820.studentapp.data.models.NoticeResponse
 import com.nishant4820.studentapp.databinding.ItemNoticeBinding
-import com.nishant4820.studentapp.utils.Constants.LOG_TAG
 import com.nishant4820.studentapp.utils.MyDiffUtil
 import com.nishant4820.studentapp.utils.OnListItemClickListener
 import com.nishant4820.studentapp.utils.loadPdf

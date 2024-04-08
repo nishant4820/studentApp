@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.nishant4820.studentapp.data.DataStoreRepository
 import com.nishant4820.studentapp.data.Repository
 import com.nishant4820.studentapp.data.database.profile.ProfileEntity
 import com.nishant4820.studentapp.data.models.StudentProfileResponse
@@ -28,11 +27,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val repository: Repository,
-    private val dataStoreRepository: DataStoreRepository
+    private val repository: Repository
 ) : ViewModel() {
-
-    var networkStatus = false
 
     /* ROOM DATABASE */
 
@@ -49,20 +45,11 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    /* DATA STORE */
-
-    fun clearAllPreferences() {
-        viewModelScope.launch(Dispatchers.IO) {
-            dataStoreRepository.clearAllPreferences()
-        }
-    }
-
 
     /* RETROFIT */
 
-
     private val _profileResponse = MutableLiveData<NetworkResult<StudentProfileResponse>>()
-    val profileResponse: LiveData<NetworkResult<StudentProfileResponse>> = this._profileResponse
+    val profileResponse: LiveData<NetworkResult<StudentProfileResponse>> = _profileResponse
 
     fun getStudentProfile() =
         viewModelScope.launch {
@@ -76,8 +63,8 @@ class ProfileViewModel @Inject constructor(
             val token = Hawk.get<String>(Constants.PREFERENCES_TOKEN)
             val response = repository.remote.getStudentProfile(token)
             _profileResponse.value = handleStudentProfileResponse(response)
-            if (this._profileResponse.value is NetworkResult.Success) {
-                val studentProfile = this._profileResponse.value!!.data
+            if (profileResponse.value is NetworkResult.Success) {
+                val studentProfile = profileResponse.value!!.data
                 if (studentProfile != null) {
                     saveStudentProfileInRoom(studentProfile)
                 }

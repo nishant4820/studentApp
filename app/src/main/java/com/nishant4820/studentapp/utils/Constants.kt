@@ -4,8 +4,6 @@ object Constants {
 
     const val BASE_URL = "http://api.bpitindia.ac.in/"
 
-    const val ARG_PARAM1 = "param1"
-    const val ARG_PARAM2 = "param2"
     const val LOG_TAG = "StudentLogTag"
 
     // API Queries
@@ -28,14 +26,12 @@ object Constants {
     const val DEFAULT_OFFSET = "0"
     const val DEFAULT_LIMIT = "10"
 
-    const val PREFERENCES_NAME = "student_settings"
     const val PREFERENCES_TOKEN = "student_token"
     const val PREFERENCES_ID = "student_id"
     const val PREFERENCES_ENROLLMENT = "student_enrollment"
     const val PREFERENCES_SOCIETY = "selected_society"
     const val PREFERENCES_SOCIETY_CHIP_ID = "selected_society_chip_id"
     const val PREFERENCES_IS_UPLOADED_BY_ME = "is_uploaded_by_me"
-    const val PREFERENCES_BACK_ONLINE = "back_online"
 
     // Network Result Status Codes
     const val NETWORK_RESULT_STATUS_UNKNOWN = 0

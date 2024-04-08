@@ -66,9 +66,3 @@ data class Image(
     @SerializedName("path")
     val path: String
 ) : Parcelable
-
-data class NoticeFormState(
-    val enrollmentError: Int? = null,
-    val passwordError: Int? = null,
-    val isDataValid: Boolean = false
-)

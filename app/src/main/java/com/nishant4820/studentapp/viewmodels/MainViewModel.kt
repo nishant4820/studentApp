@@ -1,20 +1,16 @@
 package com.nishant4820.studentapp.viewmodels
 
-import android.app.Application
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.nishant4820.studentapp.data.Repository
-import com.nishant4820.studentapp.data.database.notices.NoticesEntity
 import com.nishant4820.studentapp.data.database.settings.SettingsEntity
-import com.nishant4820.studentapp.data.models.NoticeResponse
 import com.nishant4820.studentapp.data.models.SettingsResponse
 import com.nishant4820.studentapp.utils.Constants.LOG_TAG
 import com.nishant4820.studentapp.utils.Constants.NETWORK_RESULT_MESSAGE_LOADING
-import com.nishant4820.studentapp.utils.Constants.NETWORK_RESULT_MESSAGE_NO_RESULTS
 import com.nishant4820.studentapp.utils.Constants.NETWORK_RESULT_MESSAGE_TIMEOUT
 import com.nishant4820.studentapp.utils.Constants.NETWORK_RESULT_MESSAGE_UNKNOWN
 import com.nishant4820.studentapp.utils.Constants.NETWORK_RESULT_STATUS_LOADING
@@ -31,18 +27,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val repository: Repository,
-    application: Application
-) : AndroidViewModel(application) {
+    private val repository: Repository
+) : ViewModel() {
 
     /* ROOM DATABASE */
-
-    val readNotices: LiveData<List<NoticesEntity>> = repository.local.readNotices().asLiveData()
-
-    private fun insertNotices(noticesEntity: NoticesEntity) =
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.local.insertNotices(noticesEntity)
-        }
 
     val readSettings: LiveData<List<SettingsEntity>> = repository.local.readSettings().asLiveData()
 
@@ -55,7 +43,8 @@ class MainViewModel @Inject constructor(
     /* RETROFIT */
 
 
-    var settingsResponse: MutableLiveData<NetworkResult<SettingsResponse>> = MutableLiveData()
+    private val _settingsResponse = MutableLiveData<NetworkResult<SettingsResponse>>()
+    val settingsResponse: LiveData<NetworkResult<SettingsResponse>> = _settingsResponse
 
     fun getSettings() =
         viewModelScope.launch {
@@ -63,12 +52,12 @@ class MainViewModel @Inject constructor(
         }
 
     private suspend fun getSettingsSafeCall() {
-        settingsResponse.value =
+        _settingsResponse.value =
             NetworkResult.Loading(NETWORK_RESULT_MESSAGE_LOADING, NETWORK_RESULT_STATUS_LOADING)
         try {
             val token = Hawk.get<String>(PREFERENCES_TOKEN)
             val response = repository.remote.getSettings(token)
-            settingsResponse.value = handleSettingsResponse(response)
+            _settingsResponse.value = handleSettingsResponse(response)
 
             if (settingsResponse.value is NetworkResult.Success) {
                 val settings = settingsResponse.value!!.data
@@ -83,12 +72,12 @@ class MainViewModel @Inject constructor(
                 "Main Vew Model: getSettingsSafeCall, exception message: ${e.message}"
             )
             if (e.message.toString().contains("timeout")) {
-                settingsResponse.value = NetworkResult.Error(
+                _settingsResponse.value = NetworkResult.Error(
                     NETWORK_RESULT_MESSAGE_TIMEOUT,
                     NETWORK_RESULT_STATUS_TIMEOUT
                 )
             } else {
-                settingsResponse.value =
+                _settingsResponse.value =
                     NetworkResult.Error(
                         NETWORK_RESULT_MESSAGE_UNKNOWN,
                         NETWORK_RESULT_STATUS_UNKNOWN
@@ -119,74 +108,6 @@ class MainViewModel @Inject constructor(
 
             else -> {
                 NetworkResult.Error(response.message(), response.code())
-            }
-        }
-    }
-
-
-    var noticesResponse: MutableLiveData<NetworkResult<NoticeResponse>> = MutableLiveData()
-
-    fun getAllNotices(queries: HashMap<String, String>) =
-        viewModelScope.launch {
-            getAllNoticesSafeCall(queries)
-        }
-
-    private suspend fun getAllNoticesSafeCall(queries: HashMap<String, String>) {
-        noticesResponse.value =
-            NetworkResult.Loading(NETWORK_RESULT_MESSAGE_LOADING, NETWORK_RESULT_STATUS_LOADING)
-        try {
-            val response = repository.remote.getAllNotices(queries)
-            noticesResponse.value = handleAllNoticesResponse(response)
-            if (noticesResponse.value is NetworkResult.Success) {
-                val notices = noticesResponse.value!!.data
-                if (notices != null) {
-                    offlineCacheNotices(notices)
-                }
-            }
-
-        } catch (e: Exception) {
-            Log.d(
-                LOG_TAG,
-                "Main Vew Model: getAllNoticesSafeCall, exception message: ${e.message}"
-            )
-            if (e.message.toString().contains("timeout")) {
-                noticesResponse.value = NetworkResult.Error(
-                    NETWORK_RESULT_MESSAGE_TIMEOUT,
-                    NETWORK_RESULT_STATUS_TIMEOUT
-                )
-            } else {
-                noticesResponse.value =
-                    NetworkResult.Error(
-                        NETWORK_RESULT_MESSAGE_UNKNOWN,
-                        NETWORK_RESULT_STATUS_UNKNOWN
-                    )
-            }
-        }
-    }
-
-    private fun offlineCacheNotices(notices: NoticeResponse) {
-        val noticesEntity = NoticesEntity(notices)
-        insertNotices(noticesEntity)
-    }
-
-    private fun handleAllNoticesResponse(response: Response<NoticeResponse>): NetworkResult<NoticeResponse> {
-        Log.d(
-            LOG_TAG,
-            "Main Vew Model: handleAllNoticesResponse, response message: ${response.message()}, response code: ${response.code()}"
-        )
-        when {
-            response.message().toString().contains("timeout") -> {
-                return NetworkResult.Error(NETWORK_RESULT_MESSAGE_TIMEOUT, response.code())
-            }
-
-            response.isSuccessful -> {
-                val notices = response.body()!!
-                val message = if(notices.data.isEmpty()) NETWORK_RESULT_MESSAGE_NO_RESULTS else response.message()
-                return NetworkResult.Success(notices, message, response.code())
-            }
-
-            else -> {
-                return NetworkResult.Error(response.message(), response.code())
             }
         }
     }

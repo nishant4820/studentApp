@@ -1,5 +1,6 @@
 package com.nishant4820.studentapp.data.network
 
+import com.nishant4820.studentapp.data.models.AttendanceResponse
 import com.nishant4820.studentapp.data.models.LoginRequestBody
 import com.nishant4820.studentapp.data.models.LoginResponse
 import com.nishant4820.studentapp.data.models.NoticeData
@@ -33,5 +34,8 @@ interface ApiService {
 
     @GET("result_service/getrollnumdata/")
     suspend fun getStudentResult(@QueryMap queries: Map<String, String>): Response<StudentResultResponse>
+
+    @GET("attendance_service/api/student/attendance/student")
+    suspend fun getStudentAttendance(@QueryMap queries: Map<String, String>): Response<AttendanceResponse>
 
 }

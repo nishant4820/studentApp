@@ -1,90 +1,134 @@
 package com.nishant4820.studentapp.viewmodels
 
-import android.app.Application
-import android.widget.Toast
-import androidx.lifecycle.AndroidViewModel
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.nishant4820.studentapp.data.DataStoreRepository
+import com.nishant4820.studentapp.data.Repository
+import com.nishant4820.studentapp.data.database.notices.NoticesEntity
+import com.nishant4820.studentapp.data.models.NoticeResponse
+import com.nishant4820.studentapp.utils.Constants
 import com.nishant4820.studentapp.utils.Constants.DEFAULT_LIMIT
 import com.nishant4820.studentapp.utils.Constants.DEFAULT_OFFSET
-import com.nishant4820.studentapp.utils.Constants.NETWORK_RESULT_MESSAGE_NO_INTERNET
 import com.nishant4820.studentapp.utils.Constants.PREFERENCES_ID
+import com.nishant4820.studentapp.utils.Constants.PREFERENCES_IS_UPLOADED_BY_ME
+import com.nishant4820.studentapp.utils.Constants.PREFERENCES_SOCIETY
 import com.nishant4820.studentapp.utils.Constants.QUERY_LIMIT
 import com.nishant4820.studentapp.utils.Constants.QUERY_OFFSET
 import com.nishant4820.studentapp.utils.Constants.QUERY_SOCIETY
 import com.nishant4820.studentapp.utils.Constants.QUERY_STUDENT_ID
+import com.nishant4820.studentapp.utils.NetworkResult
 import com.orhanobut.hawk.Hawk
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import retrofit2.Response
 import javax.inject.Inject
 
 @HiltViewModel
 class NoticesViewModel @Inject constructor(
-    private val dataStoreRepository: DataStoreRepository,
-    application: Application
-) : AndroidViewModel(application) {
-
-    private var selectedSocietyId: String? = null
-    private var isUploadedByMe: Boolean? = null
+    private val repository: Repository
+) : ViewModel() {
 
     var networkStatus = false
 
-    // Back Online is used to check if user if coming back to online state from offline state or the user was originally online.
-    var backOnline = false
 
-    val readSelectedSociety = dataStoreRepository.readSelectedSocietyLocal
-    val readIsUploadedByMe = dataStoreRepository.readUploadedByMe
-    val readBackOnline = dataStoreRepository.readBackOnline
+    /* ROOM DATABASE */
 
-    fun saveSelectedSociety(selectedSocietyId: String, selectedSocietyChipId: Int) {
+    val readNotices: LiveData<List<NoticesEntity>> = repository.local.readNotices().asLiveData()
+
+    private fun insertNotices(noticesEntity: NoticesEntity) =
         viewModelScope.launch(Dispatchers.IO) {
-            dataStoreRepository.saveSelectedSociety(selectedSocietyId, selectedSocietyChipId)
+            repository.local.insertNotices(noticesEntity)
+        }
+
+
+    /* RETROFIT */
+
+
+    private val _noticesResponse = MutableLiveData<NetworkResult<NoticeResponse>>()
+    val noticesResponse: LiveData<NetworkResult<NoticeResponse>> = _noticesResponse
+
+    fun getAllNotices(queries: HashMap<String, String>) {
+        viewModelScope.launch {
+            getAllNoticesSafeCall(queries)
         }
     }
 
-    fun saveIsUploadedByMe(isUploadedByMe: Boolean) {
-        viewModelScope.launch(Dispatchers.IO) {
-            dataStoreRepository.saveIsUploadedByMe(isUploadedByMe)
+    private suspend fun getAllNoticesSafeCall(queries: HashMap<String, String>) {
+        _noticesResponse.value =
+            NetworkResult.Loading(
+                Constants.NETWORK_RESULT_MESSAGE_LOADING,
+                Constants.NETWORK_RESULT_STATUS_LOADING
+            )
+        try {
+            val response = repository.remote.getAllNotices(queries)
+            _noticesResponse.value = handleAllNoticesResponse(response)
+            if (noticesResponse.value is NetworkResult.Success) {
+                val notices = noticesResponse.value!!.data
+                if (notices != null) {
+                    offlineCacheNotices(notices)
+                }
+            }
+
+        } catch (e: Exception) {
+            Log.d(
+                Constants.LOG_TAG,
+                "Notices Vew Model: getAllNoticesSafeCall, exception message: ${e.message}"
+            )
+            if (e.message.toString().contains("timeout")) {
+                _noticesResponse.value = NetworkResult.Error(
+                    Constants.NETWORK_RESULT_MESSAGE_TIMEOUT,
+                    Constants.NETWORK_RESULT_STATUS_TIMEOUT
+                )
+            } else {
+                _noticesResponse.value =
+                    NetworkResult.Error(
+                        Constants.NETWORK_RESULT_MESSAGE_UNKNOWN,
+                        Constants.NETWORK_RESULT_STATUS_UNKNOWN
+                    )
+            }
         }
     }
 
-    private fun saveBackOnline(backOnline: Boolean) =
-        viewModelScope.launch(Dispatchers.IO) {
-            dataStoreRepository.saveBackOnline(backOnline)
-        }
-
-    fun deleteSelectedSociety() {
-        viewModelScope.launch(Dispatchers.IO) {
-            dataStoreRepository.deleteSelectedSociety()
-        }
+    private fun offlineCacheNotices(notices: NoticeResponse) {
+        val noticesEntity = NoticesEntity(notices)
+        insertNotices(noticesEntity)
     }
 
-    fun deleteIsUploadedByMe() {
-        viewModelScope.launch(Dispatchers.IO) {
-            dataStoreRepository.deleteIsUploadedByMe()
+    private fun handleAllNoticesResponse(response: Response<NoticeResponse>): NetworkResult<NoticeResponse> {
+        Log.d(
+            Constants.LOG_TAG,
+            "Notices Vew Model: handleAllNoticesResponse, response message: ${response.message()}, response code: ${response.code()}"
+        )
+        return when {
+            response.message().toString().contains("timeout") -> {
+                NetworkResult.Error(Constants.NETWORK_RESULT_MESSAGE_TIMEOUT, response.code())
+            }
+
+            response.isSuccessful -> {
+                val notices = response.body()!!
+                val message =
+                    if (notices.data.isEmpty()) Constants.NETWORK_RESULT_MESSAGE_NO_RESULTS else response.message()
+                NetworkResult.Success(notices, message, response.code())
+            }
+
+            else -> {
+                NetworkResult.Error(response.message(), response.code())
+            }
         }
     }
 
     fun applyQueries(): HashMap<String, String> {
         val queries: HashMap<String, String> = HashMap()
 
-        viewModelScope.launch {
-            readSelectedSociety.collect { society ->
-                this@NoticesViewModel.selectedSocietyId = society.societyId
-            }
-        }
-        viewModelScope.launch {
-            readIsUploadedByMe.collect { isUploadedByMe ->
-                this@NoticesViewModel.isUploadedByMe = isUploadedByMe
-            }
+        if (Hawk.contains(PREFERENCES_SOCIETY)) {
+            queries[QUERY_SOCIETY] = Hawk.get(PREFERENCES_SOCIETY)
         }
 
-        if (selectedSocietyId != null) {
-            queries[QUERY_SOCIETY] = selectedSocietyId!!
-        }
-
-        if (isUploadedByMe != null) {
+        if (Hawk.contains(PREFERENCES_IS_UPLOADED_BY_ME)) {
             val studentId = Hawk.get<String>(PREFERENCES_ID)
             queries[QUERY_STUDENT_ID] = studentId
         }
@@ -93,19 +137,6 @@ class NoticesViewModel @Inject constructor(
 //        queries[QUERY_LIMIT] = DEFAULT_LIMIT
 
         return queries
-    }
-
-    fun showNetworkStatus() {
-        if (networkStatus) {
-            if (backOnline) {
-                Toast.makeText(getApplication(), "We're back online.", Toast.LENGTH_SHORT).show()
-                saveBackOnline(false)
-            }
-        } else {
-            Toast.makeText(getApplication(), NETWORK_RESULT_MESSAGE_NO_INTERNET, Toast.LENGTH_SHORT)
-                .show()
-            saveBackOnline(true)
-        }
     }
 
 }

@@ -53,19 +53,18 @@ class ProfileFragment : Fragment() {
             }
         }
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             networkListener = NetworkListener(requireContext())
             networkListener.networkAvailability.collect { networkStatus ->
                 Log.d(
                     Constants.LOG_TAG,
                     "Profile Fragment: Network Status Observer, network status: $networkStatus"
                 )
-                profileViewModel.networkStatus = networkStatus
-//                resultsViewModel.showNetworkStatus()
                 if (networkStatus) {
                     requestStudentProfile()
                 } else if (isFirstNetworkCallback) {
                     binding.tvError.text = Constants.NETWORK_RESULT_MESSAGE_NO_INTERNET
+                    binding.llNoInternet.visibility = View.VISIBLE
 //                    loadDataFromCache()
                 }
                 isFirstNetworkCallback = false
@@ -114,7 +113,6 @@ class ProfileFragment : Fragment() {
                 requireActivity().openActivity<LoginActivity>()
                 requireActivity().finishAffinity()
                 profileViewModel.clearAllTables()
-                profileViewModel.clearAllPreferences()
             }
         }
 

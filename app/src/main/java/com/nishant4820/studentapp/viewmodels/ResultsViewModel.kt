@@ -33,8 +33,6 @@ class ResultsViewModel @Inject constructor(
     private val repository: Repository
 ) : ViewModel() {
 
-    var networkStatus = false
-
     /* ROOM DATABASE */
 
     val readResults: LiveData<List<ResultsEntity>> = repository.local.readResults().asLiveData()
@@ -49,7 +47,7 @@ class ResultsViewModel @Inject constructor(
 
 
     private val _resultResponse = MutableLiveData<NetworkResult<StudentResultResponse>>()
-    val resultResponse: LiveData<NetworkResult<StudentResultResponse>> = this._resultResponse
+    val resultResponse: LiveData<NetworkResult<StudentResultResponse>> = _resultResponse
 
     fun getStudentResult(queries: HashMap<String, String>) =
         viewModelScope.launch {
@@ -61,9 +59,9 @@ class ResultsViewModel @Inject constructor(
             NetworkResult.Loading(NETWORK_RESULT_MESSAGE_LOADING, NETWORK_RESULT_STATUS_LOADING)
         try {
             val response = repository.remote.getStudentResult(queries)
-            this._resultResponse.value = handleStudentResultResponse(response)
-            if (this._resultResponse.value is NetworkResult.Success) {
-                val studentResult = this._resultResponse.value!!.data
+            _resultResponse.value = handleStudentResultResponse(response)
+            if (resultResponse.value is NetworkResult.Success) {
+                val studentResult = resultResponse.value!!.data
                 if (studentResult != null) {
                     offlineCacheStudentResult(studentResult)
                 }
