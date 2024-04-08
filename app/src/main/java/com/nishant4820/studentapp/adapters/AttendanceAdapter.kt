@@ -20,10 +20,14 @@ class AttendanceAdapter :
         fun bind(attendanceItem: AttendanceItem) {
             binding.tvSubjectName.text = attendanceItem.subjectName
             binding.tvStatus.text = String.format(
-                "Attended %d classes out of %d",
+                "Classes attended: %d out of %d",
                 attendanceItem.present,
                 attendanceItem.total
             )
+            val attendancePercentage = if (attendanceItem.total != 0) {
+                (attendanceItem.present!!.toDouble() / attendanceItem.total!!.toDouble()) * 100.0
+            } else 0.0
+            binding.tvPercentage.text = String.format("Percentage: %.2f%%", attendancePercentage)
         }
 
     }

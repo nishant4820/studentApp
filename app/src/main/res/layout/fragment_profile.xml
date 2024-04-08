@@ -13,314 +13,321 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_content"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingHorizontal="16dp"
-            android:paddingTop="16dp"
-            android:visibility="gone"
-            tools:visibility="visible">
+            android:layout_height="wrap_content"
+            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-            <LinearLayout
-                android:id="@+id/ll_main_container"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:paddingHorizontal="16dp"
+                android:paddingTop="16dp"
+                android:visibility="gone"
+                tools:visibility="visible">
 
-                <TextView
+                <LinearLayout
+                    android:id="@+id/ll_main_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/gilroy_medium"
-                    android:text="@string/welcome"
-                    android:textSize="20sp" />
-
-                <TextView
-                    android:id="@+id/tv_title_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/gilroy_bold"
-                    android:textSize="32sp"
-                    tools:text="Nishant Mittal" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="8dp"
-                    android:background="#CCCCCC" />
-
-                <TextView
-                    android:id="@+id/tv_title_batch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="6dp"
-                    android:fontFamily="@font/gilroy_semibold"
-                    android:textSize="16sp"
-                    tools:text="Batch of 2020" />
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/cv_student_detail"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
+                    android:orientation="vertical"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <LinearLayout
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="16dp"
-                        android:orientation="vertical">
+                        android:fontFamily="@font/gilroy_medium"
+                        android:text="@string/welcome"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:id="@+id/tv_title_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/gilroy_bold"
+                        android:textSize="32sp"
+                        tools:text="Nishant Mittal" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="8dp"
+                        android:background="#CCCCCC" />
+
+                    <TextView
+                        android:id="@+id/tv_title_batch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="6dp"
+                        android:fontFamily="@font/gilroy_semibold"
+                        android:textSize="16sp"
+                        tools:text="Batch of 2020" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cv_student_detail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="4dp"
-                            android:orientation="horizontal"
-                            android:paddingVertical="2dp">
+                            android:layout_margin="16dp"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="4dp"
+                                android:orientation="horizontal"
+                                android:paddingVertical="2dp">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="2"
+                                    android:fontFamily="@font/gilroy_semibold"
+                                    android:text="@string/enrollment_number" />
+
+                                <TextView
+                                    android:id="@+id/tv_enrollment"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="3"
+                                    android:fontFamily="@font/gilroy_medium"
+                                    tools:text="08820802720" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="4dp"
+                                android:orientation="horizontal"
+                                android:paddingVertical="2dp">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="2"
+                                    android:fontFamily="@font/gilroy_semibold"
+                                    android:text="@string/name" />
+
+                                <TextView
+                                    android:id="@+id/tv_name"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="3"
+                                    android:fontFamily="@font/gilroy_medium"
+                                    tools:text="NISHANT JAIN" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="4dp"
+                                android:orientation="horizontal"
+                                android:paddingVertical="2dp">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="2"
+                                    android:fontFamily="@font/gilroy_semibold"
+                                    android:text="@string/batch" />
+
+                                <TextView
+                                    android:id="@+id/tv_batch"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="3"
+                                    android:fontFamily="@font/gilroy_medium"
+                                    tools:text="2021" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="4dp"
+                                android:orientation="horizontal"
+                                android:paddingVertical="2dp">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="2"
+                                    android:fontFamily="@font/gilroy_semibold"
+                                    android:text="@string/branch_section" />
+
+                                <TextView
+                                    android:id="@+id/tv_branch_section"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="3"
+                                    android:fontFamily="@font/gilroy_medium"
+                                    tools:text="CSE-A" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/ll_society_container"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="4dp"
+                                android:orientation="horizontal"
+                                android:paddingVertical="2dp">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="2"
+                                    android:fontFamily="@font/gilroy_semibold"
+                                    android:text="@string/society" />
+
+                                <TextView
+                                    android:id="@+id/tv_society"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="3"
+                                    android:fontFamily="@font/gilroy_medium"
+                                    tools:text="NSCC" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="4dp"
+                                android:orientation="horizontal"
+                                android:paddingVertical="2dp">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="2"
+                                    android:fontFamily="@font/gilroy_semibold"
+                                    android:text="@string/phone" />
+
+                                <TextView
+                                    android:id="@+id/tv_phone"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="3"
+                                    android:fontFamily="@font/gilroy_medium"
+                                    tools:text="9811981100" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="4dp"
+                                android:orientation="horizontal"
+                                android:paddingVertical="2dp">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="2"
+                                    android:fontFamily="@font/gilroy_semibold"
+                                    android:text="@string/address" />
+
+                                <TextView
+                                    android:id="@+id/tv_address"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="3"
+                                    android:fontFamily="@font/gilroy_medium"
+                                    tools:text="St. Jonas Street" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="4dp"
+                                android:orientation="horizontal"
+                                android:paddingVertical="2dp">
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="2"
+                                    android:fontFamily="@font/gilroy_semibold"
+                                    android:text="@string/institute" />
+
+                                <TextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="3"
+                                    android:fontFamily="@font/gilroy_medium"
+                                    android:text="@string/bpit" />
+                            </LinearLayout>
 
                             <TextView
-                                android:layout_width="0dp"
+                                android:id="@+id/btn_logout"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="2"
-                                android:fontFamily="@font/gilroy_semibold"
-                                android:text="@string/enrollment_number" />
+                                android:layout_marginTop="8dp"
+                                android:drawablePadding="8dp"
+                                android:fontFamily="@font/gilroy_bold"
+                                android:gravity="center_vertical"
+                                android:text="@string/logout"
+                                app:drawableStartCompat="@drawable/ic_logout" />
 
-                            <TextView
-                                android:id="@+id/tv_enrollment"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="3"
-                                android:fontFamily="@font/gilroy_medium"
-                                tools:text="08820802720" />
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="4dp"
-                            android:orientation="horizontal"
-                            android:paddingVertical="2dp">
+                    </com.google.android.material.card.MaterialCardView>
 
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="2"
-                                android:fontFamily="@font/gilroy_semibold"
-                                android:text="@string/name" />
-
-                            <TextView
-                                android:id="@+id/tv_name"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="3"
-                                android:fontFamily="@font/gilroy_medium"
-                                tools:text="NISHANT JAIN" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="4dp"
-                            android:orientation="horizontal"
-                            android:paddingVertical="2dp">
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="2"
-                                android:fontFamily="@font/gilroy_semibold"
-                                android:text="@string/batch" />
-
-                            <TextView
-                                android:id="@+id/tv_batch"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="3"
-                                android:fontFamily="@font/gilroy_medium"
-                                tools:text="2021" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="4dp"
-                            android:orientation="horizontal"
-                            android:paddingVertical="2dp">
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="2"
-                                android:fontFamily="@font/gilroy_semibold"
-                                android:text="@string/branch_section" />
-
-                            <TextView
-                                android:id="@+id/tv_branch_section"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="3"
-                                android:fontFamily="@font/gilroy_medium"
-                                tools:text="CSE-A" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/ll_society_container"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="4dp"
-                            android:orientation="horizontal"
-                            android:paddingVertical="2dp">
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="2"
-                                android:fontFamily="@font/gilroy_semibold"
-                                android:text="@string/society" />
-
-                            <TextView
-                                android:id="@+id/tv_society"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="3"
-                                android:fontFamily="@font/gilroy_medium"
-                                tools:text="NSCC" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="4dp"
-                            android:orientation="horizontal"
-                            android:paddingVertical="2dp">
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="2"
-                                android:fontFamily="@font/gilroy_semibold"
-                                android:text="@string/phone" />
-
-                            <TextView
-                                android:id="@+id/tv_phone"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="3"
-                                android:fontFamily="@font/gilroy_medium"
-                                tools:text="9811981100" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="4dp"
-                            android:orientation="horizontal"
-                            android:paddingVertical="2dp">
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="2"
-                                android:fontFamily="@font/gilroy_semibold"
-                                android:text="@string/address" />
-
-                            <TextView
-                                android:id="@+id/tv_address"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="3"
-                                android:fontFamily="@font/gilroy_medium"
-                                tools:text="St. Jonas Street" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="4dp"
-                            android:orientation="horizontal"
-                            android:paddingVertical="2dp">
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="2"
-                                android:fontFamily="@font/gilroy_semibold"
-                                android:text="@string/institute" />
-
-                            <TextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="3"
-                                android:fontFamily="@font/gilroy_medium"
-                                android:text="@string/bpit" />
-                        </LinearLayout>
-
-                        <TextView
-                            android:id="@+id/btn_logout"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:drawablePadding="8dp"
-                            android:fontFamily="@font/gilroy_bold"
-                            android:gravity="center_vertical"
-                            android:text="@string/logout"
-                            app:drawableStartCompat="@drawable/ic_logout" />
-
-                    </LinearLayout>
-
-                </com.google.android.material.card.MaterialCardView>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="24dp"
-                    android:background="#CCCCCC" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="24dp"
+                        android:background="#CCCCCC" />
 
 
-            </LinearLayout>
+                </LinearLayout>
 
-            <ImageView
-                android:id="@+id/iv_logo"
-                android:layout_width="108dp"
-                android:layout_height="108dp"
-                android:layout_marginTop="64dp"
-                android:contentDescription="@string/app_name"
-                android:src="@drawable/ic_app_logo"
-                app:layout_constraintBottom_toTopOf="@+id/tv_developers"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ll_main_container" />
+                <ImageView
+                    android:id="@+id/iv_logo"
+                    android:layout_width="108dp"
+                    android:layout_height="108dp"
+                    android:layout_marginTop="64dp"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/ic_app_logo"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ll_main_container" />
 
-            <TextView
-                android:id="@+id/tv_developers"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="8dp"
-                android:fontFamily="@font/gilroy_bold"
-                android:text="@string/developers"
-                app:layout_constraintBottom_toTopOf="@+id/tv_build_version"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                <TextView
+                    android:id="@+id/tv_developers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/gilroy_bold"
+                    android:text="@string/developers"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_logo" />
 
-            <TextView
-                android:id="@+id/tv_build_version"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:fontFamily="@font/gilroy_medium"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:text="v2023.12.1" />
+                <TextView
+                    android:id="@+id/tv_build_version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="20dp"
+                    android:fontFamily="@font/gilroy_medium"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_developers"
+                    tools:text="v2023.12.1" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
