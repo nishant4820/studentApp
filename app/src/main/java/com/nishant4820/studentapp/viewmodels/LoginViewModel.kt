@@ -1,14 +1,21 @@
 package com.nishant4820.studentapp.viewmodels
 
+import android.app.Activity
+import android.app.Application
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.microsoft.identity.client.AuthenticationCallback
+import com.microsoft.identity.client.IAuthenticationResult
+import com.microsoft.identity.client.ISingleAccountPublicClientApplication
+import com.microsoft.identity.client.PublicClientApplication
+import com.microsoft.identity.client.SignInParameters
+import com.microsoft.identity.client.exception.MsalException
 import com.nishant4820.studentapp.R
 import com.nishant4820.studentapp.data.Repository
 import com.nishant4820.studentapp.data.database.MyTypeConverter
-import com.nishant4820.studentapp.data.models.LoginFormState
 import com.nishant4820.studentapp.data.models.LoginRequestBody
 import com.nishant4820.studentapp.data.models.LoginResponse
 import com.nishant4820.studentapp.utils.Constants.LOG_TAG
@@ -24,24 +31,76 @@ import com.nishant4820.studentapp.utils.Constants.PREFERENCES_TOKEN
 import com.nishant4820.studentapp.utils.NetworkResult
 import com.orhanobut.hawk.Hawk
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val repository: Repository) :
-    ViewModel() {
-
-    private val _loginForm = MutableLiveData<LoginFormState>()
-    val loginFormState: LiveData<LoginFormState> = _loginForm
+class LoginViewModel @Inject constructor(
+    private val repository: Repository,
+    application: Application
+) : AndroidViewModel(application) {
 
     private val _loginResponse = MutableLiveData<NetworkResult<LoginResponse>>()
     val loginResponse: LiveData<NetworkResult<LoginResponse>> = _loginResponse
 
-    fun login(loginRequestBody: LoginRequestBody) {
-        viewModelScope.launch {
-            loginSafeCall(loginRequestBody)
+    private lateinit var msalApp: ISingleAccountPublicClientApplication
+
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                msalApp = PublicClientApplication.createSingleAccountPublicClientApplication(
+                    getApplication(),
+                    R.raw.auth_config_single_account
+                )
+            } catch (e: MsalException) {
+                _loginResponse.value =
+                    NetworkResult.Error(
+                        e.message,
+                        NETWORK_RESULT_STATUS_UNKNOWN
+                    )
+            }
         }
+    }
+
+    fun signInWithMSAL(activity: Activity) {
+        val parameters = SignInParameters.builder()
+            .withActivity(activity)
+            .withLoginHint(null)
+            .withScopes(listOf("User.Read"))
+            .withCallback(object : AuthenticationCallback {
+                override fun onSuccess(authenticationResult: IAuthenticationResult) {
+                    viewModelScope.launch {
+//                        TODO("Modify below code when backend login is ready")
+//                        loginSafeCall(LoginRequestBody(authenticationResult.accessToken))
+                        _loginResponse.value =
+                            NetworkResult.Error(
+                                "Access Token: ${authenticationResult.accessToken}",
+                                200
+                            )
+                    }
+                }
+
+                override fun onError(exception: MsalException) {
+                    _loginResponse.value =
+                        NetworkResult.Error(
+                            exception.message,
+                            NETWORK_RESULT_STATUS_UNKNOWN
+                        )
+                }
+
+                override fun onCancel() {
+                    _loginResponse.value =
+                        NetworkResult.Error(
+                            "Sign in cancelled",
+                            NETWORK_RESULT_STATUS_UNKNOWN
+                        )
+                }
+            })
+            .build()
+
+        msalApp.signIn(parameters)
     }
 
     private suspend fun loginSafeCall(loginRequestBody: LoginRequestBody) {
@@ -105,27 +164,6 @@ class LoginViewModel @Inject constructor(private val repository: Repository) :
                 return NetworkResult.Error(message, response.code())
             }
         }
-    }
-
-    fun loginDataChanged(enrollment: String, password: String) {
-        if (!isEnrollmentNoValid(enrollment)) {
-            _loginForm.value = LoginFormState(enrollmentError = R.string.invalid_username)
-        } else if (!isPasswordValid(password)) {
-            _loginForm.value = LoginFormState(passwordError = R.string.invalid_password)
-        } else {
-            _loginForm.value = LoginFormState(isDataValid = true)
-        }
-    }
-
-
-    // A placeholder username validation check
-    private fun isEnrollmentNoValid(username: String): Boolean {
-        return username.length == 11
-    }
-
-    // A placeholder password validation check
-    private fun isPasswordValid(password: String): Boolean {
-        return password.length > 5
     }
 
 }

@@ -1,0 +1,16 @@
+{
+  "client_id": "f2f70b90-6111-4e01-9f91-fb88f70bd68c",
+  "authorization_user_agent": "WEBVIEW",
+  "redirect_uri": "msauth://com.nishant4820.studentapp/yTW8%2BCkhAoC%2B8dvaZakYrT1zJHM%3D",
+  "account_mode": "SINGLE",
+  "broker_redirect_uri_registered": true,
+  "authorities": [
+    {
+      "type": "AAD",
+      "audience": {
+        "type": "AzureADMyOrg",
+        "tenant_id": "4cf084e4-cd6e-401b-88f6-51abe562dc9a"
+      }
+    }
+  ]
+}

@@ -17,14 +17,6 @@ data class LoginResponse(
 )
 
 data class LoginRequestBody(
-    @SerializedName("enrollment")
-    val enrollment: Long,
-    @SerializedName("password")
-    val password: String
-)
-
-data class LoginFormState(
-    val enrollmentError: Int? = null,
-    val passwordError: Int? = null,
-    val isDataValid: Boolean = false
+    @SerializedName("access_token")
+    val accessToken: String
 )
